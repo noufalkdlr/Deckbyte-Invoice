@@ -1,11 +1,14 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import Invoice from './Invoice'
 import Home from './Home'
 
 const App = () => {
   return (
+    < >
+    <div className="text-xl text-blue-600 bg-gray-100 p-4">Hello</div>
     <Home/>
+
+    </>
+    
   )
 }
 
