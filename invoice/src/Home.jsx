@@ -16,10 +16,6 @@ const Home = () => {
     setData(updateData);
   };
 
-  const handleInvoiceNo = (e) => {
-    setInvoiceNo(e.target.value);
-  };
-
   const hadleInvoiceDate = (e) => {
     setInvoiceDate(e.target.value);
   };
@@ -34,16 +30,17 @@ const Home = () => {
     setData([...data, { itemName: "", itemPrice: "" }]);
   };
 
+  const handleRemoveItem = (index) =>{
+    if(data.length>1){
+      const updateData = data.filter((_, i) => i !== index);
+      setData(updateData)
+
+    }
+  }
+
   return (
     <>
       <form onSubmit={(e) => e.preventDefault()}>
-        <input
-          type="text"
-          name="invoicNo"
-          value={invoiceNo}
-          onChange={handleInvoiceNo}
-          placeholder="Type Invoice No"
-        />
         <input
           type="date"
           name="invoiceDate"
@@ -62,14 +59,14 @@ const Home = () => {
           name="address"
           value={billTo.address}
           onChange={handleBillTo}
-          placeholder="Client Name"
+          placeholder="Address"
         />
         <input
           type="text"
           name="phone"
           value={billTo.phone}
           onChange={handleBillTo}
-          placeholder="Client Name"
+          placeholder="Phone NO"
         />
         {data.map((item, index) => (
           <div key={index}>
@@ -95,7 +92,11 @@ const Home = () => {
               onChange={(e) => handleDataChange(index, e)}
               placeholder=" Price"
             />
+              <button type="button" onClick={() => handleRemoveItem(index) }>
+                Remov Item
+              </button>
           </div>
+          
         ))}
         <button type="button" onClick={handleAddItem}>
           ➕ Add Item
