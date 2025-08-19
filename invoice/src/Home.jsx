@@ -9,6 +9,9 @@ const Home = () => {
   const [invoiceDate, setInvoiceDate] = useState("");
   const [billTo, setBillTo] = useState({ client: "", address: "", phone: "" });
   const [advancePaid, setAdvancePaid] = useState("");
+  const [advancePayment, setAdvancePayment] = useState("");
+  const [invoice, setInvoice] = useState("");
+  const [finalPayment, setFinalPayment] = useState("");
 
   const handleDataChange = (index, e) => {
     const { name, value } = e.target;
@@ -44,9 +47,52 @@ const Home = () => {
     setAdvancePaid(e.target.value);
   };
 
+  const handleAdvancePayment = (e) => {
+    setAdvancePayment(e.target.value);
+  };
+
+  const handleFinalPayment = (e)=>{
+    setFinalPayment(e.target.value)
+  }
+
   return (
     <>
-      <div className="flex justify-center mx-auto py-10 w-[50%]">
+      <div className="flex flex-col justify-center mx-auto py-10 w-[50%]">
+        <div>
+          <button
+            className={`px-4 py-2 border-2 border-black ${
+              invoice === "Invoice" ? "bg-slate-400" : ""
+            }`}
+            onClick={() => setInvoice("Invoice")}
+          >
+            Invoice
+          </button>
+          <button
+            className={`px-4 py-2 border-2 border-black ${
+              invoice === "Receipt" ? "bg-slate-400" : ""
+            }`}
+            onClick={() => setInvoice("Receipt")}
+          >
+            Receipt
+          </button>
+          <button
+            className={`px-4 py-2 border-2 border-black ${
+              invoice === "Final Invoice" ? "bg-slate-400" : ""
+            }`}
+            onClick={() => setInvoice("Final Invoice")}
+          >
+            Final Invoice
+          </button>
+          <button
+            className={`px-4 py-2 border-2 border-black ${
+              invoice === "Final Receipt" ? "bg-slate-400" : ""
+            }`}
+            onClick={() => setInvoice("Final Receipt")}
+          >
+            Final Receipt
+          </button>
+        </div>
+
         <form onSubmit={(e) => e.preventDefault()}>
           <input
             type="text"
@@ -109,12 +155,40 @@ const Home = () => {
             ➕ Add Item
           </button>
 
-          <input
-            type="number"
-            value={advancePaid}
-            onChange={handleAdvancePaid}
-            placeholder="Advance paid amount"
-          />
+          {invoice === "Invoice" || invoice === "Final Invoice" ? (
+            <input
+              type="number"
+              value={advancePayment}
+              onChange={handleAdvancePayment}
+              placeholder="Advance Payment"
+            />
+          ) : (
+            ""
+          )}
+
+          {invoice === "Receipt" || invoice === "Final Receipt" ? (
+            <>
+            <input
+              type="number"
+              value={advancePaid}
+              onChange={handleAdvancePaid}
+              placeholder="Advance paid amount"
+            />
+
+            {invoice === "Final Receipt" ? (
+              <input
+              type="number"
+              value={finalPayment}
+              onChange={handleFinalPayment}
+              placeholder="Final Payment Received"
+            />
+            ):''}
+
+            </>
+            
+          ) : (
+            ""
+          )}
         </form>
       </div>
       <Invoice
@@ -122,7 +196,10 @@ const Home = () => {
         invoiceNo={invoiceNo}
         billTo={billTo}
         invoiceDate={invoiceDate}
-        advancePaid ={advancePaid}
+        advancePaid={advancePaid}
+        invoice={invoice}
+        advanceAmount={advancePayment}
+        finalPayment={finalPayment}
       />
     </>
   );

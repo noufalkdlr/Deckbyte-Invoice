@@ -2,13 +2,26 @@ import { useState } from "react";
 import jsPDF from "jspdf";
 import { useRef } from "react";
 
-const Invoice = ({ data, billTo, invoiceDate, advancePaid }) => {
+const Invoice = ({
+  data,
+  billTo,
+  invoiceDate,
+  advancePaid,
+  invoice,
+  advanceAmount,
+  finalPayment,
+}) => {
+  const firstInvoice = invoice === "Invoice";
+  const firstReceipt = invoice === "Receipt";
+  const finalInvoice = invoice === "Final Invoice";
+  const finalReceipt = invoice === "Final Receipt";
+
   const generateInvoiceNo = () => {
     const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0"); // 15
-    const month = String(now.getMonth() + 1).padStart(2, "0"); // 05 (months are 0-based)
-    const year = String(now.getFullYear()).slice(-2); // 25 (last two digits)
-    const randomPart = Math.floor(Math.random() * 90 + 10); // random 2-digit number between 10-99
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = String(now.getFullYear()).slice(-2);
+    const randomPart = Math.floor(Math.random() * 90 + 10);
 
     return `INV-${day}${month}${year}-${randomPart}`;
   };
@@ -61,7 +74,7 @@ const Invoice = ({ data, billTo, invoiceDate, advancePaid }) => {
               </p>
             </div>
             <div className="text-right">
-              <h1 className="font-bold text-4xl text-[#cd0d4e]">INVOICE</h1>
+              <h1 className="font-bold text-4xl text-[#cd0d4e]">{firstInvoice || finalInvoice ? (<h2>Invoice</h2>) : 'Receipt'}</h1>
               <p className="mt-2">Invoice no: {invoiceNumber}</p>
               <p>
                 Date:{" "}
@@ -102,14 +115,70 @@ const Invoice = ({ data, billTo, invoiceDate, advancePaid }) => {
               ))}
             </div>
           </div>
-          <div>{advancePaid ? <p>Advance paid {advancePaid}</p> : ""}</div>
-
-          <div className="flex justify-end gap-8">
-            <span className="font-bold text-xl">BALANCE DUE </span>
-            <span className="font-bold text-xl">
-              <span className="text-base">₹</span>{totalAmount-advancePaid} </span>
+          <div>
+            {firstInvoice ? (
+              <div>
+                <p>subtotal {totalAmount} </p>
+                <p>Advance Amount {advanceAmount}</p>
+                <div className="flex justify-end gap-8">
+                  <span className="font-bold text-xl">BALANCE DUE </span>
+                  <span className="font-bold text-xl">
+                    <span className="text-base">₹</span>
+                    {totalAmount - advanceAmount}{" "}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            {firstReceipt ? (
+              <div>
+                <p>Total Invoice Amount {totalAmount} </p>
+                <p>Advance Received {advancePaid}</p>
+                <div className="flex justify-end gap-8">
+                  <span className="font-bold text-xl">BALANCE DUE </span>
+                  <span className="font-bold text-xl">
+                    <span className="text-base">₹</span>
+                    {totalAmount - advancePaid}{" "}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            {finalInvoice ? (
+              <div>
+                <p>Total Invoice Amount {totalAmount} </p>
+                <p>Advance Paid {advancePaid}</p>
+                <div className="flex justify-end gap-8">
+                  <span className="font-bold text-xl">BALANCE DUE </span>
+                  <span className="font-bold text-xl">
+                    <span className="text-base">₹</span>
+                    {totalAmount - advancePaid}{" "}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            {finalReceipt ? (
+              <div>
+                <p>Total Invoice Amount {totalAmount} </p>
+                <p>Advance Paid {advancePaid}</p>
+                <p>Final Payment Received{finalPayment}</p>
+                <div className="flex justify-end gap-8">
+                  <span className="font-bold text-xl">BALANCE DUE </span>
+                  <span className="font-bold text-xl">
+                    <span className="text-base">₹</span>
+                    {totalAmount - finalPayment-advancePaid}{" "}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-          
+
           <div className="absolute bottom-0 left-20 right-20">
             <div className="h-40 border-t border-black "></div>
           </div>
