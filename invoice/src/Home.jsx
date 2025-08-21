@@ -1,3 +1,5 @@
+
+
 import React, { use, useState } from "react";
 import Invoice from "./Invoice";
 
@@ -10,8 +12,10 @@ const Home = () => {
   const [billTo, setBillTo] = useState({ client: "", address: "", phone: "" });
   const [advancePaid, setAdvancePaid] = useState("");
   const [advancePayment, setAdvancePayment] = useState("");
-  const [invoice, setInvoice] = useState("");
+  const [invoiceType, setInvoiceType] = useState("");
   const [finalPayment, setFinalPayment] = useState("");
+
+  const options = ["Invoice", "Receipt", "Final Invoice", "Final Receipt"];
 
   const handleDataChange = (index, e) => {
     const { name, value } = e.target;
@@ -51,145 +55,159 @@ const Home = () => {
     setAdvancePayment(e.target.value);
   };
 
-  const handleFinalPayment = (e)=>{
-    setFinalPayment(e.target.value)
-  }
+  const handleFinalPayment = (e) => {
+    setFinalPayment(e.target.value);
+  };
 
   return (
-    <>
-      <div className="flex flex-col justify-center mx-auto py-10 w-[50%]">
-        <div>
-          <button
-            className={`px-4 py-2 border-2 border-black ${
-              invoice === "Invoice" ? "bg-slate-400" : ""
-            }`}
-            onClick={() => setInvoice("Invoice")}
-          >
-            Invoice
-          </button>
-          <button
-            className={`px-4 py-2 border-2 border-black ${
-              invoice === "Receipt" ? "bg-slate-400" : ""
-            }`}
-            onClick={() => setInvoice("Receipt")}
-          >
-            Receipt
-          </button>
-          <button
-            className={`px-4 py-2 border-2 border-black ${
-              invoice === "Final Invoice" ? "bg-slate-400" : ""
-            }`}
-            onClick={() => setInvoice("Final Invoice")}
-          >
-            Final Invoice
-          </button>
-          <button
-            className={`px-4 py-2 border-2 border-black ${
-              invoice === "Final Receipt" ? "bg-slate-400" : ""
-            }`}
-            onClick={() => setInvoice("Final Receipt")}
-          >
-            Final Receipt
-          </button>
-        </div>
+    <div className="bg-black">
+      <div className="flex flex-col py-24">
+        <div className="mx-auto w-auto border-2 py-10 px-10 bg-white ">
+          <div className="flex flex-col items-start gap-2">
+            <label className="mr-2">Select Type:</label>
+            <select
+              className="border rounded p-2"
+              value={invoiceType}
+              onChange={(e) => setInvoiceType(e.target.value)}
+            >
+              <option value="">-- Select --</option>
+              {options.map((opt) => (
+                <option  key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
 
-        <form onSubmit={(e) => e.preventDefault()}>
-          <input
-            type="text"
-            name="client"
-            value={billTo.client}
-            onChange={handleBillTo}
-            placeholder="Client Name"
-          />
-          <input
-            type="date"
-            name="invoiceDate"
-            value={invoiceDate}
-            onChange={hadleInvoiceDate}
-          />
-          <textarea
-            name="address"
-            value={billTo.address}
-            onChange={handleBillTo}
-            placeholder="Address"
-            rows={3}
-          />
-          <input
-            type="text"
-            name="phone"
-            value={billTo.phone}
-            onChange={handleBillTo}
-            placeholder="Phone NO"
-          />
-          {data.map((item, index) => (
-            <div key={index}>
-              <label>Item {index + 1}</label>
-              <input
-                type="text"
-                name="itemName"
-                value={item.itemName}
-                onChange={(e) => handleDataChange(index, e)}
-                placeholder="Name"
-              />
-              <input
-                type="number"
-                name="itemQTY"
-                value={item.itemQTY}
-                onChange={(e) => handleDataChange(index, e)}
-                placeholder=" QTY"
-              />
-              <input
-                type="number"
-                name="itemPrice"
-                value={item.itemPrice}
-                onChange={(e) => handleDataChange(index, e)}
-                placeholder=" Price"
-              />
-
-              <button type="button" onClick={() => handleRemoveItem(index)}>
-                Remov Item
-              </button>
+            <div className="mt-4">
+              {invoiceType && <p>You selected: {invoiceType}</p>}
             </div>
-          ))}
-          <button type="button" onClick={handleAddItem}>
-            ➕ Add Item
-          </button>
+          </div>
 
-          {invoice === "Invoice" || invoice === "Final Invoice" ? (
+          <form
+            className="flex flex-col items-start gap-2"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <input
-              type="number"
-              value={advancePayment}
-              onChange={handleAdvancePayment}
-              placeholder="Advance Payment"
-            />
-          ) : (
-            ""
-          )}
-
-          {invoice === "Receipt" || invoice === "Final Receipt" ? (
-            <>
-            <input
-              type="number"
-              value={advancePaid}
-              onChange={handleAdvancePaid}
-              placeholder="Advance paid amount"
+              className="border px-3 py-2"
+              type="date"
+              name="invoiceDate"
+              value={invoiceDate}
+              onChange={hadleInvoiceDate}
             />
 
-            {invoice === "Final Receipt" ? (
+            <input
+              className="border px-3 py-2"
+              type="text"
+              name="client"
+              value={billTo.client}
+              onChange={handleBillTo}
+              placeholder="Client Name"
+            />
+            <input
+              className="border px-3 py-2"
+              type="text"
+              name="phone"
+              value={billTo.phone}
+              onChange={handleBillTo}
+              placeholder="Phone NO"
+            />
+            <textarea
+              className="border px-3 py-2"
+              name="address"
+              value={billTo.address}
+              onChange={handleBillTo}
+              placeholder="Address"
+              rows={3}
+            />
+
+            {data.map((item, index) => (
+              <div className="flex gap-2" key={index}>
+                <label>Item {index + 1}</label>
+                <input
+                  className="border px-3 py-2"
+                  type="text"
+                  name="itemName"
+                  value={item.itemName}
+                  onChange={(e) => handleDataChange(index, e)}
+                  placeholder="Name"
+                />
+                <input
+                  className="border px-3 py-2 w-28"
+                  type="number"
+                  name="itemQTY"
+                  value={item.itemQTY}
+                  onChange={(e) => handleDataChange(index, e)}
+                  placeholder=" QTY"
+                />
+                <input
+                  className="border px-3 py-2 w-28"
+                  type="number"
+                  name="itemPrice"
+                  value={item.itemPrice}
+                  onChange={(e) => handleDataChange(index, e)}
+                  placeholder=" Price"
+                />
+
+                <button type="button" onClick={() => handleRemoveItem(index)}>
+                  Remove Item
+                </button>
+              </div>
+            ))}
+            <button type="button" onClick={handleAddItem}>
+              ➕ Add Item
+            </button>
+
+            {invoiceType === "Invoice" ? (
               <input
-              type="number"
-              value={finalPayment}
-              onChange={handleFinalPayment}
-              placeholder="Final Payment Received"
-            />
-            ):''}
+                className="border px-3 py-2 w-28"
+                type="number"
+                value={advancePayment}
+                onChange={handleAdvancePayment}
+                placeholder="Advance payment"
+              />
+            ) : (
+              ""
+            )}
 
-            </>
-            
-          ) : (
-            ""
-          )}
-        </form>
+            {invoiceType === "Final Invoice" ? (
+              <input
+                className="border px-3 py-2 w-28"
+                type="number"
+                value={advancePaid}
+                onChange={handleAdvancePaid}
+                placeholder="Advance paid amount"
+              />
+            ) : (
+              ""
+            )}
+
+            {invoiceType === "Receipt" || invoiceType === "Final Receipt" ? (
+              <>
+                <input
+                  className="border px-3 py-2 w-28"
+                  type="number"
+                  value={advancePaid}
+                  onChange={handleAdvancePaid}
+                  placeholder="Advance paid amount"
+                />
+
+                {invoiceType === "Final Receipt" ? (
+                  <input
+                    className="border px-3 py-2 w-28"
+                    type="number"
+                    value={finalPayment}
+                    onChange={handleFinalPayment}
+                    placeholder="Final Payment Received"
+                  />
+                ) : (
+                  ""
+                )}
+              </>
+            ) : (
+              ""
+            )}
+          </form>
+        </div>
       </div>
       <Invoice
         data={data}
@@ -197,11 +215,11 @@ const Home = () => {
         billTo={billTo}
         invoiceDate={invoiceDate}
         advancePaid={advancePaid}
-        invoice={invoice}
+        invoiceType={invoiceType}
         advanceAmount={advancePayment}
         finalPayment={finalPayment}
       />
-    </>
+    </div>
   );
 };
 
