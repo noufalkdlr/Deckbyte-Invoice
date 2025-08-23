@@ -12,7 +12,7 @@ import { styles } from "./styles";
 import logo from "../../assets/DeckbyteLogo.png";
 
 // Create Document Component
-export const InvoicePDF = ({ invoiceNumber, invoiceDate }) => (
+export const InvoicePDF = ({ invoiceNumber, invoiceDate, billTo }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.main}>
@@ -33,13 +33,27 @@ export const InvoicePDF = ({ invoiceNumber, invoiceDate }) => (
           </View>
           <View style={styles.InvoiceNoDate}>
             <Text style={styles.Invoice}>INVOICE</Text>
-            <Text style={{ marginBottom: 4 }} >Invoice No.: {invoiceNumber}</Text>
+            <Text style={{ marginBottom: 4 }}>
+              Invoice No.: {invoiceNumber}
+            </Text>
             <Text>
               Date:{" "}
               {invoiceDate ||
                 new Date().toLocaleDateString("en-GB").replaceAll("/", "-")}
             </Text>
           </View>
+        </View>
+        <View>
+          <Text>BILL TO:</Text>
+          <Text>{billTo.client || "Name"}</Text>
+          {billTo.address ? (
+            billTo.address
+              .split("\n")
+              .map((line, i) => <Text key={i}>{line}</Text>)
+          ) : (
+            <Text>Address</Text>
+          )}
+          <Text>{billTo.phone}</Text>
         </View>
       </View>
     </Page>
@@ -81,7 +95,11 @@ const Invoice = ({
     <div>
       <div className="w-screen h-[1200px]">
         <PDFViewer width="100%" height="100%">
-          <InvoicePDF invoiceNumber={invoiceNumber} invoiceDate={invoiceDate} />
+          <InvoicePDF
+            invoiceNumber={invoiceNumber}
+            invoiceDate={invoiceDate}
+            billTo={billTo}
+          />
         </PDFViewer>
       </div>
     </div>

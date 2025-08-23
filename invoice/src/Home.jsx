@@ -1,9 +1,7 @@
-
-
 import React, { useState } from "react";
-import Invoice from "./components/Invoice/Invoice";
 
-import DownloadInvoiceButton from "./components/DownloadInvoiceButton";
+import DownloadInvoiceButton from "./components/DownloadInvoiceButton.jsx";
+import InvoicePreview from "./components/Invoice/InvoicePreview.jsx";
 
 const Home = () => {
   const [data, setData] = useState([
@@ -29,8 +27,10 @@ const Home = () => {
   };
 
   const hadleInvoiceDate = (e) => {
-    const dateString = e.target.value
-    const formattedDate = new Date(dateString).toLocaleDateString("en-GB").replaceAll("/", "-")
+    const dateString = e.target.value;
+    const formattedDate = new Date(dateString)
+      .toLocaleDateString("en-GB")
+      .replaceAll("/", "-");
     setInvoiceDate(formattedDate);
   };
 
@@ -76,7 +76,7 @@ const Home = () => {
             >
               <option value="">-- Select --</option>
               {options.map((opt) => (
-                <option  key={opt} value={opt}>
+                <option key={opt} value={opt}>
                   {opt}
                 </option>
               ))}
@@ -214,21 +214,28 @@ const Home = () => {
         </div>
       </div>
       <div className="py-24">
-        <Invoice
-        data={data}
-        invoiceNo={invoiceNo}
-        billTo={billTo}
-        invoiceDate={invoiceDate}
-        advancePaid={advancePaid}
-        invoiceType={invoiceType}
-        advanceAmount={advancePayment}
-        finalPayment={finalPayment}
-      />
 
+        <InvoicePreview
+          data={data}
+          billTo={billTo}
+          invoiceDate={invoiceDate}
+          advancePaid={advancePaid}
+          invoiceType={invoiceType}
+          advanceAmount={advancePayment}
+          finalPayment={finalPayment}
+        />
       </div>
-      
+
       <div className="py-24">
-        <DownloadInvoiceButton />
+        <DownloadInvoiceButton
+          data={data}
+          billTo={billTo}
+          invoiceDate={invoiceDate}
+          advancePaid={advancePaid}
+          invoiceType={invoiceType}
+          advanceAmount={advancePayment}
+          finalPayment={finalPayment}
+        />
       </div>
     </div>
   );

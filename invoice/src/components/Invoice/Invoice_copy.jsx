@@ -4,7 +4,7 @@ import { useRef } from "react";
 
 
 
-import { logo } from "../../assets/logo.js";
+// import { logo } from "../../assets/logo.js";
 
 const Invoice = ({
   data,
@@ -67,7 +67,7 @@ const Invoice = ({
             className="relative min-w-[1050px]  min-h-[1485px] px-[90px] pt-[100px] bg-white"
           >
             <div>
-              <img src={logo} className="w-60" />
+              <img  className="w-60" />
             </div>
 
             <div className="flex justify-between">

@@ -1,12 +1,28 @@
-// DownloadInvoiceButton.jsx
 import React from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { InvoicePDF } from "./Invoice/Invoice";
+import InvoiceDoc from "./Invoice/InvoiceDoc";
 
-export default function DownloadInvoiceButton() {
+export default function DownloadInvoiceButton({
+  data,
+  billTo,
+  invoiceDate,
+  advancePaid,
+  invoiceType,
+  advanceAmount,
+  finalPayment,
+}) {
   return (
     <PDFDownloadLink
-      document={<InvoicePDF />}
+      document={<InvoiceDoc 
+        data={data}
+        billTo={billTo}
+        invoiceDate={invoiceDate}
+        advancePaid={advancePaid}
+        invoiceType={invoiceType}
+        advanceAmount={advanceAmount}
+        finalPayment={finalPayment}
+      
+      />}
       fileName="invoice.pdf"
       style={{
         textDecoration: "none",
