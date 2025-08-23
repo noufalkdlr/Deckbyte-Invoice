@@ -1,7 +1,9 @@
 
 
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import Invoice from "./Invoice";
+
+import DownloadInvoiceButton from "./DownloadInvoiceButton";
 
 const Home = () => {
   const [data, setData] = useState([
@@ -60,7 +62,7 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-black">
+    <div className="bg-black flex flex-col items-center">
       <div className="flex flex-col py-24">
         <div className="mx-auto w-auto border-2 py-10 px-10 bg-white ">
           <div className="flex flex-col items-start gap-2">
@@ -209,7 +211,8 @@ const Home = () => {
           </form>
         </div>
       </div>
-      <Invoice
+      <div className="py-24">
+        <Invoice
         data={data}
         invoiceNo={invoiceNo}
         billTo={billTo}
@@ -219,6 +222,12 @@ const Home = () => {
         advanceAmount={advancePayment}
         finalPayment={finalPayment}
       />
+
+      </div>
+      
+      <div className="py-24">
+        <DownloadInvoiceButton />
+      </div>
     </div>
   );
 };
