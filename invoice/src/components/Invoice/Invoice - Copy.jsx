@@ -4,7 +4,7 @@ import { useRef } from "react";
 
 
 
-import { logo } from "./assets/logo.js";
+import { logo } from "../../assets/logo.js";
 
 const Invoice = ({
   data,

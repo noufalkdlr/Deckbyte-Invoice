@@ -1,9 +1,9 @@
 
 
 import React, { useState } from "react";
-import Invoice from "./Invoice";
+import Invoice from "./components/Invoice/Invoice";
 
-import DownloadInvoiceButton from "./DownloadInvoiceButton";
+import DownloadInvoiceButton from "./components/DownloadInvoiceButton";
 
 const Home = () => {
   const [data, setData] = useState([
@@ -29,7 +29,9 @@ const Home = () => {
   };
 
   const hadleInvoiceDate = (e) => {
-    setInvoiceDate(e.target.value);
+    const dateString = e.target.value
+    const formattedDate = new Date(dateString).toLocaleDateString("en-GB").replaceAll("/", "-")
+    setInvoiceDate(formattedDate);
   };
 
   const handleBillTo = (e) => {

@@ -1,7 +1,7 @@
 // DownloadInvoiceButton.jsx
 import React from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { InvoicePDF } from "./Invoice";
+import { InvoicePDF } from "./Invoice/Invoice";
 
 export default function DownloadInvoiceButton() {
   return (
