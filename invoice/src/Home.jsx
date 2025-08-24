@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import DownloadInvoiceButton from "./components/DownloadInvoiceButton.jsx";
 import InvoicePreview from "./components/Invoice/InvoicePreview.jsx";
@@ -7,15 +7,26 @@ const Home = () => {
   const [data, setData] = useState([
     { itemName: "", itemQTY: "", itemPrice: "" },
   ]);
-  const [invoiceNo, setInvoiceNo] = useState("");
   const [invoiceDate, setInvoiceDate] = useState("");
   const [billTo, setBillTo] = useState({ client: "", address: "", phone: "" });
   const [advancePaid, setAdvancePaid] = useState("");
   const [advancePayment, setAdvancePayment] = useState("");
   const [invoiceType, setInvoiceType] = useState("");
   const [finalPayment, setFinalPayment] = useState("");
+  const [invoiceNumber, setInvoiceNumber] = useState("");
 
   const options = ["Invoice", "Receipt", "Final Invoice", "Final Receipt"];
+
+
+  const generateInvoiceNo = () => {
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0");
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const year = String(now.getFullYear()).slice(-2);
+      const randomPart = Math.floor(Math.random() * 90 + 10);
+      const invoiceNo = `INV-${day}${month}${year}-${randomPart}`;
+      setInvoiceNumber(invoiceNo)
+  };
 
   const handleDataChange = (index, e) => {
     const { name, value } = e.target;
@@ -62,6 +73,10 @@ const Home = () => {
   const handleFinalPayment = (e) => {
     setFinalPayment(e.target.value);
   };
+
+  useEffect(()=>{
+    generateInvoiceNo();
+  },[])
 
   return (
     <div className="bg-black flex flex-col items-center">
@@ -223,6 +238,7 @@ const Home = () => {
           invoiceType={invoiceType}
           advanceAmount={advancePayment}
           finalPayment={finalPayment}
+          invoiceNumber={invoiceNumber}
         />
       </div>
 
@@ -235,6 +251,7 @@ const Home = () => {
           invoiceType={invoiceType}
           advanceAmount={advancePayment}
           finalPayment={finalPayment}
+          invoiceNumber={invoiceNumber}
         />
       </div>
     </div>

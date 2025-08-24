@@ -10,6 +10,7 @@ const InvoicePreview = ({
   invoiceType,
   advanceAmount,
   finalPayment,
+  invoiceNumber
 }) => {
   return (
 
@@ -23,6 +24,7 @@ const InvoicePreview = ({
         invoiceType={invoiceType}
         advanceAmount={advanceAmount}
         finalPayment={finalPayment}
+        invoiceNumber={invoiceNumber}
       />
     </PDFViewer>
 </div>

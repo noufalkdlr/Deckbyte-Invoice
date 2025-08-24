@@ -1,5 +1,3 @@
-import React from "react";
-import { useState } from "react";
 import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 import { styles } from "./styles";
 
@@ -13,23 +11,12 @@ const InvoiceDoc = ({
   invoiceType,
   advanceAmount,
   finalPayment,
+  invoiceNumber,
 }) => {
   const firstInvoice = invoiceType === "Invoice";
   const firstReceipt = invoiceType === "Receipt";
   const finalInvoice = invoiceType === "Final Invoice";
   const finalReceipt = invoiceType === "Final Receipt";
-
-  const generateInvoiceNo = () => {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0");
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const year = String(now.getFullYear()).slice(-2);
-    const randomPart = Math.floor(Math.random() * 90 + 10);
-
-    return `INV-${day}${month}${year}-${randomPart}`;
-  };
-
-  const [invoiceNumber, setInvoiceNumber] = useState(generateInvoiceNo());
 
   const totalAmount = data.reduce(
     (acc, item) => acc + Number(item.itemPrice) * Number(item.itemQTY),
@@ -125,7 +112,7 @@ const InvoiceDoc = ({
 
                   <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
                     <Text>Balance Due</Text>
-                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - advanceAmount}/-</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advanceAmount || 0)}/-</Text>
                   </View>
                 </View>
               
@@ -145,7 +132,7 @@ const InvoiceDoc = ({
 
                   <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
                     <Text>Balance Due</Text>
-                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - advancePaid}/-</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advancePaid || 0)}/-</Text>
                   </View>
                 </View>
               
@@ -165,7 +152,7 @@ const InvoiceDoc = ({
 
                   <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
                     <Text>Balance Due</Text>
-                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - advancePaid}/-</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advancePaid || 0)}/-</Text>
                   </View>
                 </View>
               
@@ -190,7 +177,7 @@ const InvoiceDoc = ({
 
                   <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
                     <Text>Balance Due</Text>
-                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - finalPayment - advancePaid}/-</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(finalPayment || 0) - Number(advancePaid || 0)}/-</Text>
                   </View>
                 </View>
               

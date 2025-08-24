@@ -1,4 +1,3 @@
-import React from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import InvoiceDoc from "./Invoice/InvoiceDoc";
 
@@ -10,6 +9,7 @@ export default function DownloadInvoiceButton({
   invoiceType,
   advanceAmount,
   finalPayment,
+  invoiceNumber,
 }) {
   return (
     <PDFDownloadLink
@@ -21,6 +21,7 @@ export default function DownloadInvoiceButton({
         invoiceType={invoiceType}
         advanceAmount={advanceAmount}
         finalPayment={finalPayment}
+        invoiceNumber={invoiceNumber}
       
       />}
       fileName="invoice.pdf"
