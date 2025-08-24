@@ -40,8 +40,11 @@ const totalAmount = (data || []).reduce(
               </View>
             </View>
             <View style={styles.InvoiceNoDate}>
+              {invoiceType === "Invoice" || invoiceType === "Receipt" ? (
                 <Text style={styles.InvoiceType}>INVOICE</Text>
-
+              ) : (
+                <Text style={styles.InvoiceType}>RECEIPT</Text>
+              )}
               <Text style={{ marginBottom: 4 }}>
                 Invoice No.: {invoiceNumber}
               </Text>
@@ -109,7 +112,71 @@ const totalAmount = (data || []).reduce(
                     <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advanceAmount || 0)}/-</Text>
                   </View>
                 </View>
-            
+              
+
+
+              
+                <View style={styles.summaryRow}>
+                  <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingBottom:8,}}>
+                    <Text>Total Invoice Amount</Text>
+                    <Text style={{textAlign:"right", }}>₹{totalAmount}</Text>
+                  </View>
+
+                  <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingVertical:8,}}>
+                    <Text>Advance Received</Text>
+                    <Text style={{textAlign:"right", }}>₹{advancePaid || 0}</Text>
+                  </View>
+
+                  <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
+                    <Text>Balance Due</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advancePaid || 0)}/-</Text>
+                  </View>
+                </View>
+              
+
+              
+                <View style={styles.summaryRow}>
+                  <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingBottom:8,}}>
+                    <Text>Total Invoice Amount</Text>
+                    <Text style={{textAlign:"right", }}>₹{totalAmount}</Text>
+                  </View>
+
+                  <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingVertical:8,}}>
+                    <Text>Advance Paid</Text>
+                    <Text style={{textAlign:"right", }}>₹{advancePaid || 0}</Text>
+                  </View>
+
+                  <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
+                    <Text>Balance Due</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advancePaid || 0)}/-</Text>
+                  </View>
+                </View>
+              
+
+              
+                <View style={styles.summaryRow}>
+                  <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingBottom:8,}}>
+                    <Text>Total Invoice Amount</Text>
+                    <Text style={{textAlign:"right", }}>₹{totalAmount}</Text>
+                  </View>
+
+                  <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingVertical:8,}}>
+                    <Text>Advance Paid</Text>
+                    <Text style={{textAlign:"right", }}>₹{advancePaid || 0}</Text>
+                  </View>
+
+                  <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingVertical:8,}}>
+                    <Text>Final Payment Received</Text>
+                    <Text style={{textAlign:"right", }}>₹{finalPayment || 0}</Text>
+                  </View>
+
+                  <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
+                    <Text>Balance Due</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(finalPayment || 0) - Number(advancePaid || 0)}/-</Text>
+                  </View>
+                </View>
+              
+
           </View>
           <View style={styles.bottom}>
             <View style={styles.bottomLine} />

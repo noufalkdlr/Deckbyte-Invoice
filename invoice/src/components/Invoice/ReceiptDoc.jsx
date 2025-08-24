@@ -3,7 +3,7 @@ import { styles } from "./styles";
 
 import logo from "../../assets/DeckbyteLogo.png";
 
-const InvoiceDoc = ({
+const ReceiptDoc = ({
   data,
   billTo,
   invoiceDate,
@@ -40,7 +40,8 @@ const totalAmount = (data || []).reduce(
               </View>
             </View>
             <View style={styles.InvoiceNoDate}>
-                <Text style={styles.InvoiceType}>INVOICE</Text>
+
+                <Text style={styles.InvoiceType}>RECEIPT</Text>
 
               <Text style={{ marginBottom: 4 }}>
                 Invoice No.: {invoiceNumber}
@@ -95,18 +96,18 @@ const totalAmount = (data || []).reduce(
               
                 <View style={styles.summaryRow}>
                   <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingBottom:8,}}>
-                    <Text>Subtotal</Text>
+                    <Text>Total Invoice Amount</Text>
                     <Text style={{textAlign:"right", }}>₹{totalAmount}</Text>
                   </View>
 
                   <View style={{flexDirection:"row", justifyContent:"space-between", borderBottom:.25, paddingVertical:8,}}>
-                    <Text>Advance Amount</Text>
-                    <Text style={{textAlign:"right", }}>₹{advanceAmount || 0}</Text>
+                    <Text>Advance Received</Text>
+                    <Text style={{textAlign:"right", }}>₹{advancePaid || 0}</Text>
                   </View>
 
                   <View style={{flexDirection:"row", justifyContent:"space-between", paddingTop:8,}}>
                     <Text>Balance Due</Text>
-                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advanceAmount || 0)}/-</Text>
+                    <Text style={{textAlign:"right", fontFamily:"Work Sans", fontSize: 14, fontWeight: "600", color:"#000", }}>₹{totalAmount - Number(advancePaid || 0)}/-</Text>
                   </View>
                 </View>
             
@@ -120,4 +121,4 @@ const totalAmount = (data || []).reduce(
   );
 };
 
-export default InvoiceDoc;
+export default ReceiptDoc;

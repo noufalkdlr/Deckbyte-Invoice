@@ -17,15 +17,14 @@ const Home = () => {
 
   const options = ["Invoice", "Receipt", "Final Invoice", "Final Receipt"];
 
-
   const generateInvoiceNo = () => {
-      const now = new Date();
-      const day = String(now.getDate()).padStart(2, "0");
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const year = String(now.getFullYear()).slice(-2);
-      const randomPart = Math.floor(Math.random() * 90 + 10);
-      const invoiceNo = `INV-${day}${month}${year}-${randomPart}`;
-      setInvoiceNumber(invoiceNo)
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = String(now.getFullYear()).slice(-2);
+    const randomPart = Math.floor(Math.random() * 90 + 10);
+    const invoiceNo = `INV-${day}${month}${year}-${randomPart}`;
+    setInvoiceNumber(invoiceNo);
   };
 
   const handleDataChange = (index, e) => {
@@ -74,9 +73,9 @@ const Home = () => {
     setFinalPayment(e.target.value);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     generateInvoiceNo();
-  },[])
+  }, []);
 
   return (
     <div className="bg-black flex flex-col items-center">
@@ -229,10 +228,9 @@ const Home = () => {
         </div>
       </div>
       <div className="py-24">
-
         <InvoicePreview
-          data={data}
-          billTo={billTo}
+          data={data || []}
+          billTo={billTo || {}}
           invoiceDate={invoiceDate}
           advancePaid={advancePaid}
           invoiceType={invoiceType}
@@ -242,18 +240,20 @@ const Home = () => {
         />
       </div>
 
-      <div className="py-24">
-        <DownloadInvoiceButton
-          data={data}
-          billTo={billTo}
-          invoiceDate={invoiceDate}
-          advancePaid={advancePaid}
-          invoiceType={invoiceType}
-          advanceAmount={advancePayment}
-          finalPayment={finalPayment}
-          invoiceNumber={invoiceNumber}
-        />
-      </div>
+      {invoiceType === "Invoice" && (
+        <div className="py-24">
+          <DownloadInvoiceButton
+            data={data || []}
+            billTo={billTo || {}}
+            invoiceDate={invoiceDate}
+            advancePaid={advancePaid}
+            invoiceType={invoiceType}
+            advanceAmount={advancePayment}
+            finalPayment={finalPayment}
+            invoiceNumber={invoiceNumber}
+          />
+        </div>
+      )}
     </div>
   );
 };

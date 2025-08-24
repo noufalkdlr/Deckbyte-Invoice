@@ -14,8 +14,8 @@ export default function DownloadInvoiceButton({
   return (
     <PDFDownloadLink
       document={<InvoiceDoc 
-        data={data}
-        billTo={billTo}
+        data={data || []}
+        billTo={billTo || {}}
         invoiceDate={invoiceDate}
         advancePaid={advancePaid}
         invoiceType={invoiceType}
