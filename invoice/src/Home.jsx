@@ -17,6 +17,13 @@ const Home = () => {
 
   const options = ["Invoice", "Receipt", "Final Invoice", "Final Receipt"];
 
+    const [tempData, setTempData] = useState([
+    { itemName: "", itemQTY: "", itemPrice: "" },
+  ]);
+
+
+  const [tempDate, setTempDate] = useState("");
+
   const generateInvoiceNo = () => {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, "0");
@@ -27,20 +34,30 @@ const Home = () => {
     setInvoiceNumber(invoiceNo);
   };
 
-  const handleDataChange = (index, e) => {
+  const handleTempDataChange = (index, e) => {
     const { name, value } = e.target;
 
-    const updateData = [...data];
+    const updateData = [...tempData];
     updateData[index][name] = value;
-
-    setData(updateData);
+    setTempData(updateData);
   };
 
-  const hadleInvoiceDate = (e) => {
-    const dateString = e.target.value;
+  const handleDataChange = () => {
+    setData(tempData);
+  };
+
+  const handleTempDate = (e) =>{
+      setTempDate(e.target.value);
+  }
+  
+  const hadleInvoiceDate = () => {
+    if (!tempDate) return;
+
+    const dateString = new Date(tempDate);
     const formattedDate = new Date(dateString)
       .toLocaleDateString("en-GB")
       .replaceAll("/", "-");
+
     setInvoiceDate(formattedDate);
   };
 
@@ -51,13 +68,13 @@ const Home = () => {
   };
 
   const handleAddItem = () => {
-    setData([...data, { itemName: "", itemPrice: "" }]);
+    setTempData([...tempData, { itemName: "", itemPrice: "" }]);
   };
 
   const handleRemoveItem = (index) => {
-    if (data.length > 1) {
-      const updateData = data.filter((_, i) => i !== index);
-      setData(updateData);
+    if (tempData.length > 1) {
+      const updateData = tempData.filter((_, i) => i !== index);
+      setTempData(updateData);
     }
   };
 
@@ -72,6 +89,15 @@ const Home = () => {
   const handleFinalPayment = (e) => {
     setFinalPayment(e.target.value);
   };
+
+  const handleForm = (e)=>{
+    e.preventDefault();
+    hadleInvoiceDate();
+    handleDataChange();
+  }
+
+
+
 
   useEffect(() => {
     generateInvoiceNo();
@@ -103,14 +129,14 @@ const Home = () => {
 
           <form
             className="flex flex-col items-start gap-2"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleForm}
           >
             <input
               className="border px-3 py-2"
               type="date"
               name="invoiceDate"
-              value={invoiceDate}
-              onChange={hadleInvoiceDate}
+              value={tempDate}
+              onChange={handleTempDate}
             />
 
             <input
@@ -138,7 +164,7 @@ const Home = () => {
               rows={3}
             />
 
-            {data.map((item, index) => (
+            {tempData.map((item, index) => (
               <div className="flex gap-2" key={index}>
                 <label>Item {index + 1}</label>
                 <input
@@ -146,7 +172,7 @@ const Home = () => {
                   type="text"
                   name="itemName"
                   value={item.itemName}
-                  onChange={(e) => handleDataChange(index, e)}
+                  onChange={(e) => handleTempDataChange(index, e)}
                   placeholder="Name"
                 />
                 <input
@@ -154,7 +180,7 @@ const Home = () => {
                   type="number"
                   name="itemQTY"
                   value={item.itemQTY}
-                  onChange={(e) => handleDataChange(index, e)}
+                  onChange={(e) => handleTempDataChange(index, e)}
                   placeholder=" QTY"
                 />
                 <input
@@ -162,7 +188,7 @@ const Home = () => {
                   type="number"
                   name="itemPrice"
                   value={item.itemPrice}
-                  onChange={(e) => handleDataChange(index, e)}
+                  onChange={(e) => handleTempDataChange(index, e)}
                   placeholder=" Price"
                 />
 
@@ -224,6 +250,8 @@ const Home = () => {
             ) : (
               ""
             )}
+
+            <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded" >Submit</button>
           </form>
         </div>
       </div>
@@ -240,7 +268,7 @@ const Home = () => {
         />
       </div>
 
-      {invoiceType === "Invoice" && (
+
         <div className="py-24">
           <DownloadInvoiceButton
             data={data || []}
@@ -253,7 +281,7 @@ const Home = () => {
             invoiceNumber={invoiceNumber}
           />
         </div>
-      )}
+
     </div>
   );
 };

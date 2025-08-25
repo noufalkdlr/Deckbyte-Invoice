@@ -1,5 +1,8 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import InvoiceDoc from "./Invoice/InvoiceDoc";
+import ReceiptDoc from "./Invoice/ReceiptDoc";
+import FinalInvoiceDoc from "./Invoice/FinalInvoiceDoc";
+import FinalReceiptDoc from "./Invoice/FinalReceiptDoc";
 
 export default function DownloadInvoiceButton({
   data,
@@ -13,7 +16,9 @@ export default function DownloadInvoiceButton({
 }) {
   return (
     <PDFDownloadLink
-      document={<InvoiceDoc 
+document={
+    invoiceType === "Invoice" ? (
+      <InvoiceDoc
         data={data || []}
         billTo={billTo || {}}
         invoiceDate={invoiceDate}
@@ -22,9 +27,44 @@ export default function DownloadInvoiceButton({
         advanceAmount={advanceAmount}
         finalPayment={finalPayment}
         invoiceNumber={invoiceNumber}
+      />
+    ) : invoiceType === "Receipt" ? (
+      <ReceiptDoc
+        data={data || []}
+        billTo={billTo || {}}
+        invoiceDate={invoiceDate}
+        advancePaid={advancePaid}
+        invoiceType={invoiceType}
+        advanceAmount={advanceAmount}
+        finalPayment={finalPayment}
+        invoiceNumber={invoiceNumber}
+      />
+    ) : invoiceType === "Final Invoice" ? (
+      <FinalInvoiceDoc
+        data={data || []}
+        billTo={billTo || {}}
+        invoiceDate={invoiceDate}
+        advancePaid={advancePaid}
+        invoiceType={invoiceType}
+        advanceAmount={advanceAmount}
+        finalPayment={finalPayment}
+        invoiceNumber={invoiceNumber}
+      />
+    ) : invoiceType === "Final Receipt" ? (
+      <FinalReceiptDoc
+        data={data || []}
+        billTo={billTo || {}}
+        invoiceDate={invoiceDate}
+        advancePaid={advancePaid}
+        invoiceType={invoiceType}
+        advanceAmount={advanceAmount}
+        finalPayment={finalPayment}
+        invoiceNumber={invoiceNumber}
+      />
+    ) : null
+  }
       
-      />}
-      fileName="invoice.pdf"
+      fileName={`${billTo.client || "INV"}_${invoiceDate || new Date().toLocaleDateString()}.pdf`}
       style={{
         textDecoration: "none",
         padding: "8px 12px",
