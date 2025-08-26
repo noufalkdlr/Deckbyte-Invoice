@@ -17,13 +17,13 @@ const Home = () => {
 
   const options = ["Invoice", "Receipt", "Final Invoice", "Final Receipt"];
 
-    const [tempData, setTempData] = useState([
+  const [tempData, setTempData] = useState([
     { itemName: "", itemQTY: "", itemPrice: "" },
   ]);
-
-
   const [tempDate, setTempDate] = useState("");
-
+  const [tempInvoiceType, setTempInvoiceType] = useState("");
+  const [tempBillTo, setTempBillTo] = useState({ client: "", address: "", phone: "" });
+ 
   const generateInvoiceNo = () => {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, "0");
@@ -42,14 +42,12 @@ const Home = () => {
     setTempData(updateData);
   };
 
-  const handleDataChange = () => {
-    setData(tempData);
+
+
+  const handleTempDate = (e) => {
+    setTempDate(e.target.value);
   };
 
-  const handleTempDate = (e) =>{
-      setTempDate(e.target.value);
-  }
-  
   const hadleInvoiceDate = () => {
     if (!tempDate) return;
 
@@ -61,10 +59,10 @@ const Home = () => {
     setInvoiceDate(formattedDate);
   };
 
-  const handleBillTo = (e) => {
+  const handleTempBillTo = (e) => {
     const { name, value } = e.target;
 
-    setBillTo({ ...billTo, [name]: value });
+    setTempBillTo({ ...tempBillTo, [name]: value });
   };
 
   const handleAddItem = () => {
@@ -90,47 +88,42 @@ const Home = () => {
     setFinalPayment(e.target.value);
   };
 
-  const handleForm = (e)=>{
+  const handleForm = (e) => {
     e.preventDefault();
     hadleInvoiceDate();
-    handleDataChange();
-  }
-
-
-
+    setData(tempData);
+    setInvoiceType(tempInvoiceType);
+    setBillTo(tempBillTo);
+  };
 
   useEffect(() => {
     generateInvoiceNo();
   }, []);
 
   return (
-    <div className="bg-black flex flex-col items-center">
-      <div className="flex flex-col py-24">
+    <div className="bg-[#e8e8e8] flex flex-col items-center">
+      <div className="flex flex-col justify-center h-screen">
         <div className="mx-auto w-auto border-2 py-10 px-10 bg-white ">
-          <div className="flex flex-col items-start gap-2">
-            <label className="mr-2">Select Type:</label>
-            <select
-              className="border rounded p-2"
-              value={invoiceType}
-              onChange={(e) => setInvoiceType(e.target.value)}
-            >
-              <option value="">-- Select --</option>
-              {options.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
-
-            <div className="mt-4">
-              {invoiceType && <p>You selected: {invoiceType}</p>}
-            </div>
-          </div>
-
           <form
             className="flex flex-col items-start gap-2"
             onSubmit={handleForm}
           >
+            <div className="flex flex-col items-start gap-2">
+              <label className="mr-2">Select Type:</label>
+              <select
+                className="border rounded p-2"
+                value={tempInvoiceType}
+                onChange={(e) => setTempInvoiceType(e.target.value)}
+              >
+                <option value="">-- Select --</option>
+                {options.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+
+            </div>
             <input
               className="border px-3 py-2"
               type="date"
@@ -143,23 +136,23 @@ const Home = () => {
               className="border px-3 py-2"
               type="text"
               name="client"
-              value={billTo.client}
-              onChange={handleBillTo}
+              value={tempBillTo.client}
+              onChange={handleTempBillTo}
               placeholder="Client Name"
             />
             <input
               className="border px-3 py-2"
               type="text"
               name="phone"
-              value={billTo.phone}
-              onChange={handleBillTo}
+              value={tempBillTo.phone}
+              onChange={handleTempBillTo}
               placeholder="Phone NO"
             />
             <textarea
               className="border px-3 py-2"
               name="address"
-              value={billTo.address}
-              onChange={handleBillTo}
+              value={tempBillTo.address}
+              onChange={handleTempBillTo}
               placeholder="Address"
               rows={3}
             />
@@ -201,7 +194,7 @@ const Home = () => {
               ➕ Add Item
             </button>
 
-            {invoiceType === "Invoice" ? (
+            {tempInvoiceType === "Invoice" ? (
               <input
                 className="border px-3 py-2 w-28"
                 type="number"
@@ -213,7 +206,7 @@ const Home = () => {
               ""
             )}
 
-            {invoiceType === "Final Invoice" ? (
+            {tempInvoiceType === "Final Invoice" ? (
               <input
                 className="border px-3 py-2 w-28"
                 type="number"
@@ -225,7 +218,7 @@ const Home = () => {
               ""
             )}
 
-            {invoiceType === "Receipt" || invoiceType === "Final Receipt" ? (
+            {tempInvoiceType === "Receipt" || tempInvoiceType === "Final Receipt" ? (
               <>
                 <input
                   className="border px-3 py-2 w-28"
@@ -235,7 +228,7 @@ const Home = () => {
                   placeholder="Advance paid amount"
                 />
 
-                {invoiceType === "Final Receipt" ? (
+                {tempInvoiceType === "Final Receipt" ? (
                   <input
                     className="border px-3 py-2 w-28"
                     type="number"
@@ -251,11 +244,16 @@ const Home = () => {
               ""
             )}
 
-            <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded" >Submit</button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-3 py-1 rounded"
+            >
+              Submit
+            </button>
           </form>
         </div>
       </div>
-      <div className="py-24">
+      <div className="">
         <InvoicePreview
           data={data || []}
           billTo={billTo || {}}
@@ -268,20 +266,18 @@ const Home = () => {
         />
       </div>
 
-
-        <div className="py-24">
-          <DownloadInvoiceButton
-            data={data || []}
-            billTo={billTo || {}}
-            invoiceDate={invoiceDate}
-            advancePaid={advancePaid}
-            invoiceType={invoiceType}
-            advanceAmount={advancePayment}
-            finalPayment={finalPayment}
-            invoiceNumber={invoiceNumber}
-          />
-        </div>
-
+      <div className="">
+        <DownloadInvoiceButton
+          data={data || []}
+          billTo={billTo || {}}
+          invoiceDate={invoiceDate}
+          advancePaid={advancePaid}
+          invoiceType={invoiceType}
+          advanceAmount={advancePayment}
+          finalPayment={finalPayment}
+          invoiceNumber={invoiceNumber}
+        />
+      </div>
     </div>
   );
 };
