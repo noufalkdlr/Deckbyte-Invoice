@@ -48,8 +48,7 @@ const totalAmount = (data || []).reduce(
               </Text>
               <Text>
                 Date:{" "}
-                {invoiceDate ||
-                  new Date().toLocaleDateString("en-GB").replaceAll("/", "-")}
+                {invoiceDate}
               </Text>
             </View>
           </View>

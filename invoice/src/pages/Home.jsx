@@ -10,7 +10,14 @@ const Home = () => {
   const [data, setData] = useState([
     { itemName: "", itemQTY: "", itemPrice: "" },
   ]);
-  const [invoiceDate, setInvoiceDate] = useState("");
+  const [invoiceDate, setInvoiceDate] = useState(() => {
+    return new Date()
+      .toLocaleDateString("en-GB")
+      .replaceAll("/", "-");
+  });
+  const [rawDate, setRawDate] = useState(() => {
+    return new Date().toISOString().split("T")[0];
+  });
   const [billTo, setBillTo] = useState({ client: "", address: "", phone: "" });
   const [advancePaid, setAdvancePaid] = useState("");
   const [advancePayment, setAdvancePayment] = useState("");
@@ -20,16 +27,7 @@ const Home = () => {
 
   const options = ["Invoice", "Receipt", "Final Invoice", "Final Receipt"];
 
-  const [tempData, setTempData] = useState([
-    { itemName: "", itemQTY: "", itemPrice: "" },
-  ]);
-  const [tempDate, setTempDate] = useState("");
   const [tempInvoiceType, setTempInvoiceType] = useState("");
-  const [tempBillTo, setTempBillTo] = useState({
-    client: "",
-    address: "",
-    phone: "",
-  });
 
   const navigate = useNavigate();
 
@@ -43,33 +41,26 @@ const Home = () => {
     setInvoiceNumber(invoiceNo);
   };
 
-  const handleTempDataChange = (index, e) => {
+  const handleData = (index, e) => {
     const { name, value } = e.target;
 
-    const updateData = [...tempData];
+    const updateData = [...data];
     updateData[index][name] = value;
-    setTempData(updateData);
+    setData(updateData);
   };
 
-  const handleTempDate = (e) => {
-    setTempDate(e.target.value);
-  };
-
-  const hadleInvoiceDate = () => {
-    if (!tempDate) return;
-
-    const dateString = new Date(tempDate);
+  const handleInvoiceDate = (e) => {
+    const dateString = e.target.value;
+    setRawDate(dateString);
     const formattedDate = new Date(dateString)
       .toLocaleDateString("en-GB")
       .replaceAll("/", "-");
-
-    setInvoiceDate(formattedDate);
+      setInvoiceDate(formattedDate);
   };
 
-  const handleTempBillTo = (e) => {
+  const handleBillTo = (e) => {
     const { name, value } = e.target;
-
-    setTempBillTo({ ...tempBillTo, [name]: value });
+    setBillTo({ ...billTo, [name]: value });
   };
 
   const handleAddItem = () => {
@@ -98,8 +89,8 @@ const Home = () => {
   const handlePreviewPage = () => {
     navigate("/preview", {
       state: {
-        data:tempData,
-        billTo:tempBillTo,
+        data,
+        billTo,
         invoiceDate,
         advancePaid,
         invoiceType:tempInvoiceType,
@@ -112,10 +103,7 @@ const Home = () => {
 
   const handleForm = (e) => {
     e.preventDefault();
-    hadleInvoiceDate();
-    setData(tempData);
     setInvoiceType(tempInvoiceType);
-    setBillTo(tempBillTo);
     handlePreviewPage();
   };
 
@@ -132,7 +120,6 @@ const Home = () => {
             onSubmit={handleForm}
           >
             <div className="flex flex-col items-start gap-2">
-              <label className="mr-2">Select Type:</label>
               <select
                 className="border rounded p-2"
                 value={tempInvoiceType}
@@ -150,36 +137,36 @@ const Home = () => {
               className="border px-3 py-2"
               type="date"
               name="invoiceDate"
-              value={tempDate}
-              onChange={handleTempDate}
+              value={rawDate}
+              onChange={handleInvoiceDate}
             />
 
             <input
               className="border px-3 py-2"
               type="text"
               name="client"
-              value={tempBillTo.client}
-              onChange={handleTempBillTo}
+              value={billTo.client}
+              onChange={handleBillTo}
               placeholder="Client Name"
             />
             <input
               className="border px-3 py-2"
               type="text"
               name="phone"
-              value={tempBillTo.phone}
-              onChange={handleTempBillTo}
+              value={billTo.phone}
+              onChange={handleBillTo}
               placeholder="Phone NO"
             />
             <textarea
               className="border px-3 py-2"
               name="address"
-              value={tempBillTo.address}
-              onChange={handleTempBillTo}
+              value={billTo.address}
+              onChange={handleBillTo}
               placeholder="Address"
               rows={3}
             />
 
-            {tempData.map((item, index) => (
+            {data.map((item, index) => (
               <div className="flex gap-2" key={index}>
                 <label>Item {index + 1}</label>
                 <input
@@ -187,7 +174,7 @@ const Home = () => {
                   type="text"
                   name="itemName"
                   value={item.itemName}
-                  onChange={(e) => handleTempDataChange(index, e)}
+                  onChange={(e) => handleData(index, e)}
                   placeholder="Name"
                 />
                 <input
@@ -195,7 +182,7 @@ const Home = () => {
                   type="number"
                   name="itemQTY"
                   value={item.itemQTY}
-                  onChange={(e) => handleTempDataChange(index, e)}
+                  onChange={(e) => handleData(index, e)}
                   placeholder=" QTY"
                 />
                 <input
@@ -203,7 +190,7 @@ const Home = () => {
                   type="number"
                   name="itemPrice"
                   value={item.itemPrice}
-                  onChange={(e) => handleTempDataChange(index, e)}
+                  onChange={(e) => handleData(index, e)}
                   placeholder=" Price"
                 />
 
