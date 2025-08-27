@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import DownloadInvoiceButton from "./components/DownloadInvoiceButton.jsx";
-import InvoicePreview from "./components/Invoice/InvoicePreview.jsx";
+import DownloadInvoiceButton from "../components/DownloadInvoiceButton.jsx";
+import InvoicePreview from "../components/Invoice/InvoicePreview.jsx";
+
+import { useNavigate } from "react-router-dom";
+import Preview from "./Preview.jsx";
 
 const Home = () => {
   const [data, setData] = useState([
@@ -22,8 +25,14 @@ const Home = () => {
   ]);
   const [tempDate, setTempDate] = useState("");
   const [tempInvoiceType, setTempInvoiceType] = useState("");
-  const [tempBillTo, setTempBillTo] = useState({ client: "", address: "", phone: "" });
- 
+  const [tempBillTo, setTempBillTo] = useState({
+    client: "",
+    address: "",
+    phone: "",
+  });
+
+  const navigate = useNavigate();
+
   const generateInvoiceNo = () => {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, "0");
@@ -41,8 +50,6 @@ const Home = () => {
     updateData[index][name] = value;
     setTempData(updateData);
   };
-
-
 
   const handleTempDate = (e) => {
     setTempDate(e.target.value);
@@ -88,12 +95,28 @@ const Home = () => {
     setFinalPayment(e.target.value);
   };
 
+  const handlePreviewPage = () => {
+    navigate("/preview", {
+      state: {
+        data:tempData,
+        billTo:tempBillTo,
+        invoiceDate,
+        advancePaid,
+        invoiceType:tempInvoiceType,
+        advanceAmount: advancePayment,
+        finalPayment,
+        invoiceNumber,
+      },
+    });
+  };
+
   const handleForm = (e) => {
     e.preventDefault();
     hadleInvoiceDate();
     setData(tempData);
     setInvoiceType(tempInvoiceType);
     setBillTo(tempBillTo);
+    handlePreviewPage();
   };
 
   useEffect(() => {
@@ -122,7 +145,6 @@ const Home = () => {
                   </option>
                 ))}
               </select>
-
             </div>
             <input
               className="border px-3 py-2"
@@ -218,7 +240,8 @@ const Home = () => {
               ""
             )}
 
-            {tempInvoiceType === "Receipt" || tempInvoiceType === "Final Receipt" ? (
+            {tempInvoiceType === "Receipt" ||
+            tempInvoiceType === "Final Receipt" ? (
               <>
                 <input
                   className="border px-3 py-2 w-28"
@@ -253,19 +276,6 @@ const Home = () => {
           </form>
         </div>
       </div>
-      <div className="">
-        <InvoicePreview
-          data={data || []}
-          billTo={billTo || {}}
-          invoiceDate={invoiceDate}
-          advancePaid={advancePaid}
-          invoiceType={invoiceType}
-          advanceAmount={advancePayment}
-          finalPayment={finalPayment}
-          invoiceNumber={invoiceNumber}
-        />
-      </div>
-
       <div className="">
         <DownloadInvoiceButton
           data={data || []}
