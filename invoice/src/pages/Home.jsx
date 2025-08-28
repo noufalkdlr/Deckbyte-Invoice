@@ -6,25 +6,12 @@ import InvoicePreview from "../components/Invoice/InvoicePreview.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import Preview from "./Preview.jsx";
 
-const Home = () => {
-  // const [data, setData] = useState([
-  //   { itemName: "", itemQTY: "", itemPrice: "" },
-  // ]);
-  // const [invoiceDate, setInvoiceDate] = useState(() => {
-  //   return new Date()
-  //     .toLocaleDateString("en-GB")
-  //     .replaceAll("/", "-");
-  // });
-  // const [rawDate, setRawDate] = useState(() => {
-  //   return new Date().toISOString().split("T")[0];
-  // });
-  // const [billTo, setBillTo] = useState({ client: "", address: "", phone: "" });
-  // const [advancePaid, setAdvancePaid] = useState("");
-  // const [advancePayment, setAdvancePayment] = useState("");
-  // const [invoiceType, setInvoiceType] = useState("");
-  // const [finalPayment, setFinalPayment] = useState("");
-  // const [invoiceNumber, setInvoiceNumber] = useState("");
+import InvoiceTypeSelect from "../components/Invoice/mui/InvoiceTypeSelect.jsx";
+import DateSelect from "../components/Invoice/mui/DateSelect.jsx";
+import NameSelect from "../components/Invoice/mui/NameSelect.jsx";
+import PhoneNoSelect from "../components/Invoice/mui/PhoneNoSelect.jsx";
 
+const Home = () => {
   const { state } = useLocation();
 
   const [data, setData] = useState(
@@ -80,8 +67,7 @@ const Home = () => {
     setData(updateData);
   };
 
-  const handleInvoiceDate = (e) => {
-    const dateString = e.target.value;
+  const handleInvoiceDate = (dateString) => {
     setRawDate(dateString);
     const formattedDate = new Date(dateString)
       .toLocaleDateString("en-GB")
@@ -148,52 +134,70 @@ const Home = () => {
         onSubmit={handleForm}
       >
         <div className="">
-          <div className="flex justify-between w-full sm:w-[50%]">
-            <div className="">
-              <select
-                className="border p-2"
-                value={invoiceType}
-                onChange={(e) => setInvoiceType(e.target.value)}
-              >
-                <option value="">-- Select --</option>
-                {options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
+          <div className=" for_PC_View hidden sm:flex w-full gap-2 sm:gap-6">
+            <div className="flex w-full gap-2 sm:gap-6">
+              <div className="w-[50%]">
+                <InvoiceTypeSelect
+                  invoiceType={invoiceType}
+                  setInvoiceType={setInvoiceType}
+                  options={options}
+                />
+              </div>
+              <div className="w-[50%]">
+                <DateSelect
+                  rawDate={rawDate}
+                  handleInvoiceDate={handleInvoiceDate}
+                />
+              </div>
             </div>
-            <input
-              className="border px-3 py-2"
-              type="date"
-              name="invoiceDate"
-              value={rawDate}
-              onChange={handleInvoiceDate}
-            />
+            <div className=" w-full"></div>
+          </div>
+          <div className=" for_Mobile_View sm:hidden flex w-full gap-2 sm:gap-6">
+            <div className="flex w-full gap-2 ">
+              <div className="w-[50%]">
+                <InvoiceTypeSelect
+                  invoiceType={invoiceType}
+                  setInvoiceType={setInvoiceType}
+                  options={options}
+                />
+              </div>
+              <div className="w-[50%]">
+                <DateSelect
+                  rawDate={rawDate}
+                  handleInvoiceDate={handleInvoiceDate}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-col  sm:flex-row sm:justify-between w-full">
-            <input
-              className="border px-3 py-2"
-              type="text"
-              name="client"
-              value={billTo.client}
-              onChange={handleBillTo}
-              placeholder="Client Name"
-            />
-            <input
-              className="border px-3 py-2"
-              type="text"
-              name="phone"
-              value={billTo.phone}
-              onChange={handleBillTo}
-              placeholder="Phone NO"
-            />
+          <div className="flex flex-col  sm:gap-6  sm:flex-row sm:justify-between w-full">
+            <div className="w-full">
+              {/* <input
+                className="w-full border px-3 py-2"
+                type="text"
+                name="client"
+                value={billTo.client}
+                onChange={handleBillTo}
+                placeholder="Client Name"
+              /> */}
+              <NameSelect />
+            </div>
+            <div className="w-full">
+              {/* <input
+                className=" w-full border px-3 py-2"
+                type="text"
+                name="phone"
+                value={billTo.phone}
+                onChange={handleBillTo}
+                placeholder="Phone NO"
+              /> */}
+              <PhoneNoSelect />
+            </div>
           </div>
 
-          <div>
+          <div className="sm:w-[50%]">
             <textarea
-              className="border px-3 py-2"
+              className="w-full border px-3 py-2"
               name="address"
               value={billTo.address}
               onChange={handleBillTo}
