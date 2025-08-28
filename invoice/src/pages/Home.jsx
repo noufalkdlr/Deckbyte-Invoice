@@ -3,31 +3,62 @@ import React, { useEffect, useState } from "react";
 import DownloadInvoiceButton from "../components/DownloadInvoiceButton.jsx";
 import InvoicePreview from "../components/Invoice/InvoicePreview.jsx";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Preview from "./Preview.jsx";
 
 const Home = () => {
-  const [data, setData] = useState([
-    { itemName: "", itemQTY: "", itemPrice: "" },
-  ]);
-  const [invoiceDate, setInvoiceDate] = useState(() => {
-    return new Date()
-      .toLocaleDateString("en-GB")
-      .replaceAll("/", "-");
-  });
-  const [rawDate, setRawDate] = useState(() => {
-    return new Date().toISOString().split("T")[0];
-  });
-  const [billTo, setBillTo] = useState({ client: "", address: "", phone: "" });
-  const [advancePaid, setAdvancePaid] = useState("");
-  const [advancePayment, setAdvancePayment] = useState("");
-  const [invoiceType, setInvoiceType] = useState("");
-  const [finalPayment, setFinalPayment] = useState("");
-  const [invoiceNumber, setInvoiceNumber] = useState("");
+  // const [data, setData] = useState([
+  //   { itemName: "", itemQTY: "", itemPrice: "" },
+  // ]);
+  // const [invoiceDate, setInvoiceDate] = useState(() => {
+  //   return new Date()
+  //     .toLocaleDateString("en-GB")
+  //     .replaceAll("/", "-");
+  // });
+  // const [rawDate, setRawDate] = useState(() => {
+  //   return new Date().toISOString().split("T")[0];
+  // });
+  // const [billTo, setBillTo] = useState({ client: "", address: "", phone: "" });
+  // const [advancePaid, setAdvancePaid] = useState("");
+  // const [advancePayment, setAdvancePayment] = useState("");
+  // const [invoiceType, setInvoiceType] = useState("");
+  // const [finalPayment, setFinalPayment] = useState("");
+  // const [invoiceNumber, setInvoiceNumber] = useState("");
+
+  const { state } = useLocation();
+
+  const [data, setData] = useState(
+    state?.data || [{ itemName: "", itemQTY: "", itemPrice: "" }]
+  );
+
+  const [invoiceDate, setInvoiceDate] = useState(
+    state?.invoiceDate ||
+      new Date().toLocaleDateString("en-GB").replaceAll("/", "-")
+  );
+
+  const [rawDate, setRawDate] = useState(
+    state?.invoiceDate
+      ? new Date(state.invoiceDate.split("-").reverse().join("-"))
+          .toISOString()
+          .split("T")[0] // convert dd-mm-yyyy back to yyyy-mm-dd
+      : new Date().toISOString().split("T")[0]
+  );
+
+  const [billTo, setBillTo] = useState(
+    state?.billTo || { client: "", address: "", phone: "" }
+  );
+
+  const [advancePaid, setAdvancePaid] = useState(state?.advancePaid || "");
+  const [advancePayment, setAdvancePayment] = useState(
+    state?.advanceAmount || ""
+  );
+  const [invoiceType, setInvoiceType] = useState(state?.invoiceType || "");
+  const [finalPayment, setFinalPayment] = useState(state?.finalPayment || "");
+  const [invoiceNumber, setInvoiceNumber] = useState(
+    state?.invoiceNumber || ""
+  );
 
   const options = ["Invoice", "Receipt", "Final Invoice", "Final Receipt"];
-
-  const [tempInvoiceType, setTempInvoiceType] = useState("");
 
   const navigate = useNavigate();
 
@@ -55,7 +86,7 @@ const Home = () => {
     const formattedDate = new Date(dateString)
       .toLocaleDateString("en-GB")
       .replaceAll("/", "-");
-      setInvoiceDate(formattedDate);
+    setInvoiceDate(formattedDate);
   };
 
   const handleBillTo = (e) => {
@@ -64,7 +95,7 @@ const Home = () => {
   };
 
   const handleAddItem = () => {
-    setTempData([...tempData, { itemName: "", itemPrice: "" }]);
+    setData([...data, { itemName: "", itemPrice: "" }]);
   };
 
   const handleRemoveItem = (index) => {
@@ -93,7 +124,7 @@ const Home = () => {
         billTo,
         invoiceDate,
         advancePaid,
-        invoiceType:tempInvoiceType,
+        invoiceType,
         advanceAmount: advancePayment,
         finalPayment,
         invoiceNumber,
@@ -103,7 +134,6 @@ const Home = () => {
 
   const handleForm = (e) => {
     e.preventDefault();
-    setInvoiceType(tempInvoiceType);
     handlePreviewPage();
   };
 
@@ -112,18 +142,18 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-[#e8e8e8] flex flex-col items-center">
-      <div className="flex flex-col justify-center h-screen">
-        <div className="mx-auto w-auto border-2 py-10 px-10 bg-white ">
-          <form
-            className="flex flex-col items-start gap-2"
-            onSubmit={handleForm}
-          >
-            <div className="flex flex-col items-start gap-2">
+    <div className="flex justify-center bg-[#E8E8E8] h-screen sm:py-24">
+      <form
+        className="bg-white h-screen sm:h-fit w-screen sm:w-[896px] px-4 sm:px-10 py-[62px] sm:pt-[62px] sm:pb-[57px] "
+        onSubmit={handleForm}
+      >
+        <div className="">
+          <div className="flex justify-between w-full sm:w-[50%]">
+            <div className="">
               <select
-                className="border rounded p-2"
-                value={tempInvoiceType}
-                onChange={(e) => setTempInvoiceType(e.target.value)}
+                className="border p-2"
+                value={invoiceType}
+                onChange={(e) => setInvoiceType(e.target.value)}
               >
                 <option value="">-- Select --</option>
                 {options.map((opt) => (
@@ -140,7 +170,9 @@ const Home = () => {
               value={rawDate}
               onChange={handleInvoiceDate}
             />
+          </div>
 
+          <div className="flex flex-col  sm:flex-row sm:justify-between w-full">
             <input
               className="border px-3 py-2"
               type="text"
@@ -157,6 +189,9 @@ const Home = () => {
               onChange={handleBillTo}
               placeholder="Phone NO"
             />
+          </div>
+
+          <div>
             <textarea
               className="border px-3 py-2"
               name="address"
@@ -165,116 +200,121 @@ const Home = () => {
               placeholder="Address"
               rows={3}
             />
+          </div>
 
-            {data.map((item, index) => (
-              <div className="flex gap-2" key={index}>
-                <label>Item {index + 1}</label>
-                <input
-                  className="border px-3 py-2"
-                  type="text"
-                  name="itemName"
-                  value={item.itemName}
-                  onChange={(e) => handleData(index, e)}
-                  placeholder="Name"
-                />
-                <input
-                  className="border px-3 py-2 w-28"
-                  type="number"
-                  name="itemQTY"
-                  value={item.itemQTY}
-                  onChange={(e) => handleData(index, e)}
-                  placeholder=" QTY"
-                />
-                <input
-                  className="border px-3 py-2 w-28"
-                  type="number"
-                  name="itemPrice"
-                  value={item.itemPrice}
-                  onChange={(e) => handleData(index, e)}
-                  placeholder=" Price"
-                />
-
-                <button type="button" onClick={() => handleRemoveItem(index)}>
-                  Remove Item
-                </button>
+          {data.map((item, index) => (
+            <div className="flex gap-2" key={index}>
+              <div className="flex flex-col sm:flex-row w-full sm:justify-between">
+                <div className="bg-green-200 flex flex-col">
+                  <input
+                    className="border px-3 py-2"
+                    type="text"
+                    name="itemName"
+                    value={item.itemName}
+                    onChange={(e) => handleData(index, e)}
+                    placeholder="Name"
+                  />
+                </div>
+                <div className="flex w-full sm:w-[50%] justify-between items-center">
+                  <input
+                    className="border px-3 py-2 w-28"
+                    type="number"
+                    name="itemQTY"
+                    value={item.itemQTY}
+                    onChange={(e) => handleData(index, e)}
+                    placeholder=" QTY"
+                  />
+                  <input
+                    className="border px-3 py-2 w-28"
+                    type="number"
+                    name="itemPrice"
+                    value={item.itemPrice}
+                    onChange={(e) => handleData(index, e)}
+                    placeholder=" Price"
+                  />
+                  <div>
+                    <button
+                      className="bg-red-600 text-white px-3 py-2"
+                      type="button"
+                      onClick={() => handleRemoveItem(index)}
+                    >
+                      Remove Item
+                    </button>
+                  </div>
+                </div>
               </div>
-            ))}
-            <button type="button" onClick={handleAddItem}>
-              ➕ Add Item
+            </div>
+          ))}
+          <div className="h-px bg-black my-5 sm:hidden"></div>
+          <div>
+            <button
+              className="bg-green-600 text-white px-3 py-2 w-full"
+              type="button"
+              onClick={handleAddItem}
+            >
+              Add Item
             </button>
+          </div>
 
-            {tempInvoiceType === "Invoice" ? (
-              <input
-                className="border px-3 py-2 w-28"
-                type="number"
-                value={advancePayment}
-                onChange={handleAdvancePayment}
-                placeholder="Advance payment"
-              />
-            ) : (
-              ""
-            )}
+          {invoiceType === "Invoice" ? (
+            <input
+              className="border px-3 py-2 w-28"
+              type="number"
+              value={advancePayment}
+              onChange={handleAdvancePayment}
+              placeholder="Advance payment"
+            />
+          ) : (
+            ""
+          )}
 
-            {tempInvoiceType === "Final Invoice" ? (
+          {invoiceType === "Final Invoice" ? (
+            <input
+              className="border px-3 py-2 w-28"
+              type="number"
+              value={advancePaid}
+              onChange={handleAdvancePaid}
+              placeholder="Advance paid amount"
+            />
+          ) : (
+            ""
+          )}
+
+          {invoiceType === "Receipt" || invoiceType === "Final Receipt" ? (
+            <div className="flex flex-col sm:flex-row sm:justify-between">
               <input
-                className="border px-3 py-2 w-28"
+                className="border px-3 py-2"
                 type="number"
                 value={advancePaid}
                 onChange={handleAdvancePaid}
                 placeholder="Advance paid amount"
               />
-            ) : (
-              ""
-            )}
 
-            {tempInvoiceType === "Receipt" ||
-            tempInvoiceType === "Final Receipt" ? (
-              <>
+              {invoiceType === "Final Receipt" ? (
                 <input
-                  className="border px-3 py-2 w-28"
+                  className="border px-3 py-2"
                   type="number"
-                  value={advancePaid}
-                  onChange={handleAdvancePaid}
-                  placeholder="Advance paid amount"
+                  value={finalPayment}
+                  onChange={handleFinalPayment}
+                  placeholder="Final Payment Received"
                 />
-
-                {tempInvoiceType === "Final Receipt" ? (
-                  <input
-                    className="border px-3 py-2 w-28"
-                    type="number"
-                    value={finalPayment}
-                    onChange={handleFinalPayment}
-                    placeholder="Final Payment Received"
-                  />
-                ) : (
-                  ""
-                )}
-              </>
-            ) : (
-              ""
-            )}
-
+              ) : (
+                ""
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+          <div>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-3 py-1 rounded"
+              className="bg-blue-600 text-white px-3 py-2 w-full"
             >
               Submit
             </button>
-          </form>
+          </div>
         </div>
-      </div>
-      <div className="">
-        <DownloadInvoiceButton
-          data={data || []}
-          billTo={billTo || {}}
-          invoiceDate={invoiceDate}
-          advancePaid={advancePaid}
-          invoiceType={invoiceType}
-          advanceAmount={advancePayment}
-          finalPayment={finalPayment}
-          invoiceNumber={invoiceNumber}
-        />
-      </div>
+      </form>
     </div>
   );
 };
