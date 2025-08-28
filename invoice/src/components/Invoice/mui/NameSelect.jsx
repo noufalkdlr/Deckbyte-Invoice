@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-export default function NameSelect() {
+export default function NameSelect({ billTo, handleBillTo }) {
   return (
     <Box
       component="form"
@@ -10,7 +10,14 @@ export default function NameSelect() {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Client Name" variant="outlined" />
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        label="Client Name"
+        name="client"
+        value={billTo.client}
+        onChange={handleBillTo}
+      />
     </Box>
   );
 }

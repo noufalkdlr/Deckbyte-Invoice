@@ -10,6 +10,13 @@ import InvoiceTypeSelect from "../components/Invoice/mui/InvoiceTypeSelect.jsx";
 import DateSelect from "../components/Invoice/mui/DateSelect.jsx";
 import NameSelect from "../components/Invoice/mui/NameSelect.jsx";
 import PhoneNoSelect from "../components/Invoice/mui/PhoneNoSelect.jsx";
+import AddressTextArea from "../components/Invoice/mui/AddressTextArea.jsx";
+import ItemNameField from "../components/Invoice/mui/ItemNameField.jsx";
+import QTYField from "../components/Invoice/mui/QTYField.jsx";
+import PriceField from "../components/Invoice/mui/PriceField.jsx";
+import RemoveButton from "../components/Invoice/mui/RemoveButton.jsx";
+import AddItemButton from "../components/Invoice/mui/AddItemButton.jsx";
+import SubmitButton from "../components/Invoice/mui/SubmitButton.jsx";
 
 const Home = () => {
   const { state } = useLocation();
@@ -81,13 +88,14 @@ const Home = () => {
   };
 
   const handleAddItem = () => {
-    setData([...data, { itemName: "", itemPrice: "" }]);
+    setData([...data, { itemName: "", itemQuantity: "", itemPrice: "" }]);
+    console.log(data)
   };
 
   const handleRemoveItem = (index) => {
-    if (tempData.length > 1) {
-      const updateData = tempData.filter((_, i) => i !== index);
-      setTempData(updateData);
+    if (data.length > 1) {
+      const updateData = data.filter((_, i) => i !== index);
+      setData(updateData);
     }
   };
 
@@ -133,7 +141,7 @@ const Home = () => {
         className="bg-white h-screen sm:h-fit w-screen sm:w-[896px] px-4 sm:px-10 py-[62px] sm:pt-[62px] sm:pb-[57px] "
         onSubmit={handleForm}
       >
-        <div className="">
+        <div className="flex flex-col gap-5 sm:gap-[26px]">
           <div className=" for_PC_View hidden sm:flex w-full gap-2 sm:gap-6">
             <div className="flex w-full gap-2 sm:gap-6">
               <div className="w-[50%]">
@@ -170,94 +178,52 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="flex flex-col  sm:gap-6  sm:flex-row sm:justify-between w-full">
+          <div className="flex flex-col gap-5  sm:gap-6  sm:flex-row sm:justify-between w-full">
             <div className="w-full">
-              {/* <input
-                className="w-full border px-3 py-2"
-                type="text"
-                name="client"
-                value={billTo.client}
-                onChange={handleBillTo}
-                placeholder="Client Name"
-              /> */}
-              <NameSelect />
+              <NameSelect billTo={billTo} handleBillTo={handleBillTo} />
             </div>
             <div className="w-full">
-              {/* <input
-                className=" w-full border px-3 py-2"
-                type="text"
-                name="phone"
-                value={billTo.phone}
-                onChange={handleBillTo}
-                placeholder="Phone NO"
-              /> */}
-              <PhoneNoSelect />
+              <PhoneNoSelect billTo={billTo} handleBillTo={handleBillTo} />
             </div>
           </div>
 
-          <div className="sm:w-[50%]">
-            <textarea
-              className="w-full border px-3 py-2"
-              name="address"
-              value={billTo.address}
-              onChange={handleBillTo}
-              placeholder="Address"
-              rows={3}
-            />
+          <div className="">
+            <AddressTextArea billTo={billTo} handleBillTo={handleBillTo} />
           </div>
 
           {data.map((item, index) => (
-            <div className="flex gap-2" key={index}>
-              <div className="flex flex-col sm:flex-row w-full sm:justify-between">
-                <div className="bg-green-200 flex flex-col">
-                  <input
-                    className="border px-3 py-2"
-                    type="text"
-                    name="itemName"
-                    value={item.itemName}
-                    onChange={(e) => handleData(index, e)}
-                    placeholder="Name"
+            <div
+              key={index}
+              className="w-full flex flex-col gap-5 sm:flex-row sm:justify-between sm:gap-6 sm:items-center"
+            >
+              <div className="w-full sm:w-[50%]">
+                <ItemNameField
+                  item={item}
+                  handleData={handleData}
+                  index={index}
+                />
+              </div>
+              <div className="flex gap-2 sm:w-[50%] sm:gap-4 ">
+                <div className="w-[70%]">
+                  <QTYField item={item} handleData={handleData} index={index} />
+                </div>
+                <div className="w-full">
+                  <PriceField
+                    item={item}
+                    handleData={handleData}
+                    index={index}
                   />
                 </div>
-                <div className="flex w-full sm:w-[50%] justify-between items-center">
-                  <input
-                    className="border px-3 py-2 w-28"
-                    type="number"
-                    name="itemQTY"
-                    value={item.itemQTY}
-                    onChange={(e) => handleData(index, e)}
-                    placeholder=" QTY"
-                  />
-                  <input
-                    className="border px-3 py-2 w-28"
-                    type="number"
-                    name="itemPrice"
-                    value={item.itemPrice}
-                    onChange={(e) => handleData(index, e)}
-                    placeholder=" Price"
-                  />
-                  <div>
-                    <button
-                      className="bg-red-600 text-white px-3 py-2"
-                      type="button"
-                      onClick={() => handleRemoveItem(index)}
-                    >
-                      Remove Item
-                    </button>
-                  </div>
+
+                <div >
+                  <RemoveButton index={index} handleRemoveItem={handleRemoveItem} />
                 </div>
               </div>
             </div>
           ))}
-          <div className="h-px bg-black my-5 sm:hidden"></div>
-          <div>
-            <button
-              className="bg-green-600 text-white px-3 py-2 w-full"
-              type="button"
-              onClick={handleAddItem}
-            >
-              Add Item
-            </button>
+          <div className="h-px bg-neutral-300 sm:hidden"></div>
+          <div className="h-full">
+            <AddItemButton handleAddItem={handleAddItem} />
           </div>
 
           {invoiceType === "Invoice" ? (
@@ -310,12 +276,7 @@ const Home = () => {
             ""
           )}
           <div>
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-3 py-2 w-full"
-            >
-              Submit
-            </button>
+            <SubmitButton/>
           </div>
         </div>
       </form>

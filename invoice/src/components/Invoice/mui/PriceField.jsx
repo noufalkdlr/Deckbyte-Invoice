@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-export default function PhoneNoSelect({ billTo, handleBillTo }) {
+export default function PriceField({ item, handleData, index }) {
   return (
     <Box
       component="form"
@@ -12,11 +12,11 @@ export default function PhoneNoSelect({ billTo, handleBillTo }) {
     >
       <TextField
         id="outlined-basic"
-        label="Phone Number"
-        name="phone"
-        value={billTo.phone}
-        onChange={handleBillTo}
         variant="outlined"
+        label="Price"
+        name="itemPrice"
+        value={item.itemPrice}
+        onChange={(e) => handleData(index, e)}
       />
     </Box>
   );
