@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import DownloadInvoiceButton from "../components/DownloadInvoiceButton.jsx";
-import InvoicePreview from "../components/Invoice/InvoicePreview.jsx";
-
 import { useLocation, useNavigate } from "react-router-dom";
-import Preview from "./Preview.jsx";
 
 import InvoiceTypeSelect from "../components/Invoice/mui/InvoiceTypeSelect.jsx";
 import DateSelect from "../components/Invoice/mui/DateSelect.jsx";
@@ -140,7 +136,7 @@ const Home = () => {
   return (
     <div className="flex justify-center bg-[#E8E8E8] min-h-screen  sm:py-20">
       <form
-        className="bg-white w-screen sm:w-[896px] px-4 sm:px-10 py-8 sm:pt-[62px] sm:pb-[57px] rounded-md "
+        className="bg-white w-screen h-fit sm:w-[896px] px-4 sm:px-10 py-8 sm:pt-[62px] sm:pb-[57px] rounded-md "
         onSubmit={handleForm}
       >
         <div className="flex flex-col gap-5 sm:gap-[26px]">

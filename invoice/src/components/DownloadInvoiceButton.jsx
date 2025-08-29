@@ -1,4 +1,5 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import Button from "@mui/material/Button";
 import InvoiceDoc from "./Invoice/InvoiceDoc";
 import ReceiptDoc from "./Invoice/ReceiptDoc";
 import FinalInvoiceDoc from "./Invoice/FinalInvoiceDoc";
@@ -14,10 +15,8 @@ export default function DownloadInvoiceButton({
   finalPayment,
   invoiceNumber,
 }) {
-  return (
-    <PDFDownloadLink
-document={
-    invoiceType === "Invoice" ? (
+
+  const document =     invoiceType === "Invoice" ? (
       <InvoiceDoc
         data={data || []}
         billTo={billTo || {}}
@@ -62,19 +61,28 @@ document={
         invoiceNumber={invoiceNumber}
       />
     ) : null
-  }
-      
+
+  return (
+    <PDFDownloadLink
+document={document }
+
       fileName={`${billTo.client || "INV"}_${invoiceDate || new Date().toLocaleDateString()}.pdf`}
       style={{
         textDecoration: "none",
-        padding: "8px 12px",
-        color: "#fff",
-        backgroundColor: "#007bff",
-        borderRadius: 4,
       }}
     >
       {({ blob, url, loading, error }) =>
-        loading ? "Preparing PDF..." : "Download Invoice"
+          <Button
+      variant="contained"
+      color="primary"
+      sx={{
+        height: "56px",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {loading ? "Preparing PDF..." : "Download Invoice"}
+    </Button>
+
       }
     </PDFDownloadLink>
   );

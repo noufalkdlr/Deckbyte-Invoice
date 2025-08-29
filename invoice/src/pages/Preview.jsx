@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import Button from "@mui/material/Button";
 import InvoicePreview from "../components/Invoice/InvoicePreview";
 import DownloadInvoiceButton from "../components/DownloadInvoiceButton";
 import { useNavigate } from "react-router-dom";
@@ -17,9 +18,9 @@ const Preview = () => {
     advanceAmount,
     finalPayment,
     invoiceNumber,
-  } = state || {}; // fallback if state is undefined
+  } = state || {};
   return (
-    <>
+    <div className="flex flex-col items-center ]">
       {state ? (
         <div className="w-full">
           <InvoicePreview
@@ -37,8 +38,8 @@ const Preview = () => {
         <p>No data passed</p>
       )}
 
-      <div className="py-24 flex justify-center">
-        <div>
+      <div className="py-24 flex justify-between w-fit gap-2 sm:gap-6">
+
           <DownloadInvoiceButton
             data={data || []}
             billTo={billTo || {}}
@@ -49,8 +50,14 @@ const Preview = () => {
             finalPayment={finalPayment}
             invoiceNumber={invoiceNumber}
           />
-        </div>
-        <button
+
+        <Button
+          variant="contained"
+          color="success"
+          sx={{
+            height: "56px",
+            whiteSpace: "nowrap",
+          }}
           onClick={() =>
             navigate("/", {
               state: {
@@ -66,10 +73,10 @@ const Preview = () => {
             })
           }
         >
-          Back to edit
-        </button>
+          BACK TO EDIT
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

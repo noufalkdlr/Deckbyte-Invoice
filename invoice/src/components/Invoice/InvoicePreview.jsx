@@ -18,8 +18,8 @@ const InvoicePreview = ({
   return (
     <>
       {invoiceType === "Invoice" && (
-        <div className="flex justify-center h-[1113px] ">
-          <PDFViewer width="50%" height="100%">
+        <div className="w-screen h-[1200px]">
+          <PDFViewer width="100%" height="100%" >
             <InvoiceDoc
               data={data || []}
               billTo={billTo || {}}
