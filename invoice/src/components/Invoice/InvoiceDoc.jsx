@@ -54,13 +54,12 @@ const totalAmount = (data || []).reduce(
           <View>
             <Text style={styles.BillTo}>BILL TO:</Text>
             <Text style={{ marginBottom: 8 }}>
-              {billTo.client || "Tamara Resto Bar"}
+              {billTo.client}
             </Text>
             <Text style={{ marginBottom: 8 }}>
-              {billTo.address ||
-                `Thrissur, Kodungallur ${"\n"}Kerala, India, 680666`}
+              {billTo.address}
             </Text>
-            <Text>{billTo.phone || "+91 974646 9319"}</Text>
+            <Text>{billTo.phone}</Text>
           </View>
           <View style={styles.Table}>
             {/* Table Header */}
@@ -75,12 +74,12 @@ const totalAmount = (data || []).reduce(
             <View style={styles.TableBody}>
               {data.map((item, index) => (
                 <View key={index} style={styles.TableItems}>
-                  <Text style={{ flex: 4 }}>{item.itemName || "logo"}</Text>
+                  <Text style={{ flex: 4 }}>{item.itemName }</Text>
                   <Text style={{ flex: 1, textAlign: "center" }}>
-                    {item.itemQTY || 2}
+                    {item.itemQTY}
                   </Text>
                   <Text style={{ flex: 1, textAlign: "center" }}>
-                    {item.itemPrice || 3000}
+                    {item.itemPrice}
                   </Text>
                   <Text style={{ flex: 1, textAlign: "right" }}>
                     {Number(item.itemPrice) * Number(item.itemQTY)}
