@@ -138,9 +138,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex justify-center bg-[#E8E8E8] min-h-screen  sm:py-24">
+    <div className="flex justify-center bg-[#E8E8E8] min-h-screen  sm:py-20">
       <form
-        className="bg-white min-h-screen sm:h-fit w-screen sm:w-[896px] px-4 sm:px-10 py-[62px] sm:pt-[62px] sm:pb-[57px] rounded-md "
+        className="bg-white w-screen sm:w-[896px] px-4 sm:px-10 py-8 sm:pt-[62px] sm:pb-[57px] rounded-md "
         onSubmit={handleForm}
       >
         <div className="flex flex-col gap-5 sm:gap-[26px]">

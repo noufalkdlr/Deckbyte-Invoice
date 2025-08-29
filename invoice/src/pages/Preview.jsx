@@ -21,7 +21,7 @@ const Preview = () => {
   return (
     <>
       {state ? (
-        <div>
+        <div className="w-full">
           <InvoicePreview
             data={data || []}
             billTo={billTo || {}}
