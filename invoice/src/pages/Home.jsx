@@ -17,6 +17,8 @@ import PriceField from "../components/Invoice/mui/PriceField.jsx";
 import RemoveButton from "../components/Invoice/mui/RemoveButton.jsx";
 import AddItemButton from "../components/Invoice/mui/AddItemButton.jsx";
 import SubmitButton from "../components/Invoice/mui/SubmitButton.jsx";
+import DisabledField from "../components/Invoice/mui/DisabledField.jsx";
+import PaymentField from "../components/Invoice/mui/PaymentField.jsx";
 
 const Home = () => {
   const { state } = useLocation();
@@ -89,7 +91,7 @@ const Home = () => {
 
   const handleAddItem = () => {
     setData([...data, { itemName: "", itemQuantity: "", itemPrice: "" }]);
-    console.log(data)
+    console.log(data);
   };
 
   const handleRemoveItem = (index) => {
@@ -136,9 +138,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex justify-center bg-[#E8E8E8] h-screen sm:py-24">
+    <div className="flex justify-center bg-[#E8E8E8] min-h-screen  sm:py-24">
       <form
-        className="bg-white h-screen sm:h-fit w-screen sm:w-[896px] px-4 sm:px-10 py-[62px] sm:pt-[62px] sm:pb-[57px] "
+        className="bg-white h-screen sm:h-fit w-screen sm:w-[896px] px-4 sm:px-10 py-[62px] sm:pt-[62px] sm:pb-[57px] rounded-md "
         onSubmit={handleForm}
       >
         <div className="flex flex-col gap-5 sm:gap-[26px]">
@@ -215,8 +217,11 @@ const Home = () => {
                   />
                 </div>
 
-                <div >
-                  <RemoveButton index={index} handleRemoveItem={handleRemoveItem} />
+                <div>
+                  <RemoveButton
+                    index={index}
+                    handleRemoveItem={handleRemoveItem}
+                  />
                 </div>
               </div>
             </div>
@@ -227,56 +232,84 @@ const Home = () => {
           </div>
 
           {invoiceType === "Invoice" ? (
-            <input
-              className="border px-3 py-2 w-28"
-              type="number"
-              value={advancePayment}
-              onChange={handleAdvancePayment}
-              placeholder="Advance payment"
-            />
+            <div className="flex gap-2 sm:gap-6">
+              <div className="w-[50%]">
+                <PaymentField
+                  payment={advancePayment}
+                  handleFunction={handleAdvancePayment}
+                  label={"Advance Payment"}
+                />
+              </div>
+              <div className="w-[50%]">
+                <DisabledField />
+              </div>
+            </div>
           ) : (
             ""
           )}
 
           {invoiceType === "Final Invoice" ? (
-            <input
-              className="border px-3 py-2 w-28"
-              type="number"
-              value={advancePaid}
-              onChange={handleAdvancePaid}
-              placeholder="Advance paid amount"
-            />
+            <div className="flex gap-2 sm:gap-6">
+              <div className="w-[50%]">
+                <PaymentField
+                  payment={advancePaid}
+                  handleFunction={handleAdvancePaid}
+                  label={"Advance Paid"}
+                />
+              </div>
+              <div className="w-[50%]">
+                <DisabledField />
+              </div>
+            </div>
           ) : (
             ""
           )}
 
-          {invoiceType === "Receipt" || invoiceType === "Final Receipt" ? (
-            <div className="flex flex-col sm:flex-row sm:justify-between">
-              <input
-                className="border px-3 py-2"
-                type="number"
-                value={advancePaid}
-                onChange={handleAdvancePaid}
-                placeholder="Advance paid amount"
-              />
-
-              {invoiceType === "Final Receipt" ? (
-                <input
-                  className="border px-3 py-2"
-                  type="number"
-                  value={finalPayment}
-                  onChange={handleFinalPayment}
-                  placeholder="Final Payment Received"
+          {invoiceType === "Receipt" ? (
+            <div className="flex gap-2 sm:gap-6">
+              <div className="w-[50%]">
+                <PaymentField
+                  payment={advancePaid}
+                  handleFunction={handleAdvancePaid}
+                  label={"Advance Paid"}
                 />
-              ) : (
-                ""
-              )}
+              </div>
+              <div className="w-[50%]">
+                <DisabledField />
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+          {invoiceType === "Final Receipt" ? (
+            // <input
+            //   className="border px-3 py-2"
+            //   type="number"
+            //   value={finalPayment}
+            //   onChange={handleFinalPayment}
+            //   placeholder="Final Payment Received"
+            // />
+            <div className="flex gap-2 sm:gap-6">
+              <div className="w-[50%]">
+                <PaymentField
+                  payment={advancePaid}
+                  handleFunction={handleAdvancePaid}
+                  label={"Advance Paid"}
+                />
+              </div>
+              <div className="w-[50%]">
+                <PaymentField
+                  payment={finalPayment}
+                  handleFunction={handleFinalPayment}
+                  label={"Final Payment Received"}
+                />
+              </div>
             </div>
           ) : (
             ""
           )}
           <div>
-            <SubmitButton/>
+            <SubmitButton />
           </div>
         </div>
       </form>
