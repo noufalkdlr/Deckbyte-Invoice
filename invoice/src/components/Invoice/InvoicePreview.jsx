@@ -5,79 +5,34 @@ import ReceiptDoc from "./ReceiptDoc";
 import FinalInvoiceDoc from "./FinalInvoiceDoc";
 import FinalReceiptDoc from "./FinalReceiptDoc";
 
-const InvoicePreview = ({
-  data,
-  billTo,
-  invoiceDate,
-  advancePaid,
-  invoiceType,
-  advanceAmount,
-  finalPayment,
-  invoiceNumber,
-}) => {
+const InvoicePreview = ({invoiceType ,...props}) => {
   return (
     <>
       {invoiceType === "Invoice" && (
         <div className="w-screen h-[1200px]">
-          <PDFViewer width="100%" height="100%" >
-            <InvoiceDoc
-              data={data || []}
-              billTo={billTo || {}}
-              invoiceDate={invoiceDate}
-              advancePaid={advancePaid}
-              invoiceType={invoiceType}
-              advanceAmount={advanceAmount}
-              finalPayment={finalPayment}
-              invoiceNumber={invoiceNumber}
-            />
+          <PDFViewer width="100%" height="100%">
+            <InvoiceDoc {...props} />
           </PDFViewer>
         </div>
       )}
       {invoiceType === "Receipt" && (
         <div className="w-screen h-[1200px]">
           <PDFViewer width="100%" height="100%">
-            <ReceiptDoc
-              data={data || []}
-              billTo={billTo || {}}
-              invoiceDate={invoiceDate}
-              advancePaid={advancePaid}
-              invoiceType={invoiceType}
-              advanceAmount={advanceAmount}
-              finalPayment={finalPayment}
-              invoiceNumber={invoiceNumber}
-            />
+            <ReceiptDoc {...props} />
           </PDFViewer>
         </div>
       )}
-      {invoiceType === "Final Invoice" &&(
+      {invoiceType === "Final Invoice" && (
         <div className="w-screen h-[1200px]">
           <PDFViewer width="100%" height="100%">
-            <FinalInvoiceDoc
-              data={data || []}
-              billTo={billTo || {}}
-              invoiceDate={invoiceDate}
-              advancePaid={advancePaid}
-              invoiceType={invoiceType}
-              advanceAmount={advanceAmount}
-              finalPayment={finalPayment}
-              invoiceNumber={invoiceNumber}
-            />
+            <FinalInvoiceDoc {...props} />
           </PDFViewer>
         </div>
       )}
-      {invoiceType === "Final Receipt" &&(
+      {invoiceType === "Final Receipt" && (
         <div className="w-screen h-[1200px]">
           <PDFViewer width="100%" height="100%">
-            <FinalReceiptDoc
-              data={data || []}
-              billTo={billTo || {}}
-              invoiceDate={invoiceDate}
-              advancePaid={advancePaid}
-              invoiceType={invoiceType}
-              advanceAmount={advanceAmount}
-              finalPayment={finalPayment}
-              invoiceNumber={invoiceNumber}
-            />
+            <FinalReceiptDoc {...props} />
           </PDFViewer>
         </div>
       )}
