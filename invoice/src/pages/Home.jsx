@@ -136,7 +136,7 @@ const Home = () => {
   return (
     <div className="flex justify-center bg-[#E8E8E8] min-h-screen  sm:py-20">
       <form
-        className="bg-white w-screen h-fit sm:w-[896px] px-4 sm:px-10 py-8 sm:pt-[62px] sm:pb-[57px] rounded-md "
+        className="bg-white w-screen h-full sm:w-[896px] px-4 sm:px-10 py-8 sm:pt-[62px] sm:pb-[57px] rounded-md "
         onSubmit={handleForm}
       >
         <div className="flex flex-col gap-5 sm:gap-[26px]">
@@ -202,7 +202,7 @@ const Home = () => {
                 />
               </div>
               <div className="flex gap-2 sm:w-[50%] sm:gap-4 ">
-                <div className="w-[50%]">
+                <div className="w-[70%]">
                   <QTYField item={item} handleData={handleData} index={index} />
                 </div>
                 <div className="w-full">

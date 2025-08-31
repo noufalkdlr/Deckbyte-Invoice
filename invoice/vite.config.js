@@ -16,7 +16,7 @@ export default defineConfig({
         name: "Deckbyte Invoice",
         short_name: "InvoiceGen",
         description: "Create and download invoices easily",
-        theme_color: "#1976d2",
+        theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
         start_url: "/",
