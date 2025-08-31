@@ -202,7 +202,7 @@ const Home = () => {
                 />
               </div>
               <div className="flex gap-2 sm:w-[50%] sm:gap-4 ">
-                <div className="w-[70%]">
+                <div className="w-[50%]">
                   <QTYField item={item} handleData={handleData} index={index} />
                 </div>
                 <div className="w-full">

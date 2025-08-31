@@ -1,6 +1,8 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 export default function RemoveButton({ index, handleRemoveItem }) {
   return (
@@ -9,12 +11,12 @@ export default function RemoveButton({ index, handleRemoveItem }) {
       color="error"
       onClick={() => handleRemoveItem(index)}
       sx={{
-        width: "100%",
+        width: "56px",
         height: "56px",
-        whiteSpace: "nowrap",
+        minWidth: "56px",
       }}
     >
-      REMOVE ITEM
+      <DeleteOutlineOutlinedIcon/>
     </Button>
   );
 }
