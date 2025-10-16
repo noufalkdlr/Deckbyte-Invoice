@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { useGoogleAuth } from "../GoogleAuthContext";
-
 import AddToDriveIcon from "@mui/icons-material/AddToDrive";
 import CircularProgress from "@mui/material/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const UploadInvoiceButton = ({ pdfBlob, fileName }) => {
-  const { token } = useGoogleAuth();
+  const { token, logout } = useGoogleAuth();
   const [uploading, setUploading] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -18,6 +17,21 @@ const UploadInvoiceButton = ({ pdfBlob, fileName }) => {
 
   const FOLDER_ID = "1bFRrK-Hpe1p13uQIRzV5dACUBBeaLuOx";
 
+  // ✅ Listen for auto-logout (from context)
+  useEffect(() => {
+    const handleLogout = () => {
+      setSnackbar({
+        open: true,
+        message: "⚠️ Google session expired. Please log in again.",
+        severity: "warning",
+      });
+    };
+
+    window.addEventListener("googleLogout", handleLogout);
+    return () => window.removeEventListener("googleLogout", handleLogout);
+  }, []);
+
+  // ✅ Upload Function
   const uploadFile = async () => {
     if (!token) {
       setSnackbar({
@@ -53,15 +67,25 @@ const UploadInvoiceButton = ({ pdfBlob, fileName }) => {
         }
       );
 
+      if (res.status === 401 || res.status === 403) {
+        setSnackbar({
+          open: true,
+          message: "⚠️ Session expired. Please log in again.",
+          severity: "error",
+        });
+        logout();
+        return;
+      }
+
       const data = await res.json();
       console.log("Uploaded:", data);
+
       setSnackbar({
         open: true,
         message: "✅ Uploaded to Google Drive (Invoices folder)!",
         severity: "success",
       });
     } catch (err) {
-      console.error("Upload failed:", err);
       console.error("Upload failed:", err);
       setSnackbar({
         open: true,
@@ -73,6 +97,7 @@ const UploadInvoiceButton = ({ pdfBlob, fileName }) => {
     }
   };
 
+  // Hide button if not logged in
   if (!pdfBlob || !token) return null;
 
   return (
@@ -93,7 +118,8 @@ const UploadInvoiceButton = ({ pdfBlob, fileName }) => {
           "Upload to Drive"
         )}
       </Button>
-      {/* ✅ Snackbar for custom alert */}
+
+      {/* Snackbar for alerts */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
